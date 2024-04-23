@@ -58,13 +58,13 @@ public class ItemSpawn : MonoBehaviour
         }
         king.transform.GetChild(1).gameObject.SetActive(true);
     }
-    public void SetKing2(GameObject king2)
-    {
-        Pointer.SetKing(king);
-        king.transform.GetChild(1).gameObject.SetActive(false);
-        king = king2;
-        king.transform.GetChild(1).gameObject.SetActive(true);
-    }
+    //public void SetKing2(GameObject king2)
+    //{
+    //    Pointer.SetKing(king);
+    //    king.transform.GetChild(1).gameObject.SetActive(false);
+    //    king = king2;
+    //    king.transform.GetChild(1).gameObject.SetActive(true);
+    //}
     private void Update()
     {
         cd -= Time.deltaTime;

@@ -127,7 +127,7 @@ public class EnemyCollide : MonoBehaviour
             if(level > ItemSpawn.kingLevel)
             {
                 ItemSpawn.kingLevel = level;
-                ItemSpawn.SetKing2(gameObject);
+                //ItemSpawn.SetKing2(gameObject);
                 
             }
             levelText.text = "Level " + level.ToString();
@@ -185,6 +185,12 @@ public class EnemyCollide : MonoBehaviour
             else
             {
                 Die();
+                GameObject temp = ItemSpawn.enemies[Random.Range(0, ItemSpawn.enemies.Count)];
+                while (temp == gameObject)
+                {
+                    temp = ItemSpawn.enemies[Random.Range(0, ItemSpawn.enemies.Count)];
+                }
+                //ItemSpawn.SetKing2(temp);
                 Destroy(gameObject.transform.parent.gameObject);
             }
         }

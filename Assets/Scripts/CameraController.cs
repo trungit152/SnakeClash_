@@ -9,9 +9,29 @@ public class CameraController : MonoBehaviour
     public Vector3 newFollowOffset;
 
     private float changeDuration = 2f;
+
+    private HeadController headController;
+    private HeadController HeadController
+    {
+        get
+        {
+            if (headController == null)
+            {
+                headController = GameObject.Find("PlayerHead").GetComponent<HeadController>();
+            }
+            return headController;
+        }
+        set
+        {
+            headController = value;
+        }
+    }
     void Start()
     {
-        newFollowOffset = new Vector3(0, 30, 0); 
+        if(HeadController.level < 50) newFollowOffset = new Vector3(0, 30, 0);
+        else if(HeadController.level >= 50 && HeadController.level < 250) newFollowOffset = new Vector3(0, 47, 0);
+        else newFollowOffset = new Vector3(0, 64, 0);
+
     }
     void Update()
     {
@@ -19,7 +39,7 @@ public class CameraController : MonoBehaviour
     }
     public void CameraUp()
     {
-        newFollowOffset += new Vector3(0, 15, 0);
+        newFollowOffset += new Vector3(0, 17, 0);
         if (virtualCamera != null)
         {
             StartCoroutine(CameraUpSmooth(newFollowOffset));
