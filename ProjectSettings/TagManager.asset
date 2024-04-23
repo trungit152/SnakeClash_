@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - PlayerBody
+  - PlayerHead
+  - Wall
+  - Food
+  - Head
+  - Body
+  - SpeedUp
+  - Magnite
+  - 90deg
+  - -90deg
+  - 180deg
+  - 0deg
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - PlayerHead
+  - Water
+  - UI
+  - wall
+  - PlayerBody
+  - Body
+  - Head
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
