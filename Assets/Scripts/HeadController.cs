@@ -27,7 +27,7 @@ public class HeadController : MonoBehaviour
     private float speedUpAdd = 10f;
     private float itemTime;
     private bool isSpeedUp;
-    public int level;
+    public int level = 5;
     private MovementController movementController;
     private MovementController MovementController
     {
@@ -68,7 +68,8 @@ public class HeadController : MonoBehaviour
     }
     private void Start()
     {
-        level = 5;
+        level = data.startLevel;
+        Debug.Log("Head " + level);
         bodyParts = new List<GameObject>();
         positionHistory = new List<Vector3>();
         for (int i = 0; i < startBody.transform.childCount; i++)
@@ -87,6 +88,21 @@ public class HeadController : MonoBehaviour
         {
             GrowSnake();
             SizeGrow();
+        }
+        if(level >= 50 && level < 200)
+        {
+            CameraController.CameraUp();
+        }
+        else if (level >= 200 && level < 450)
+        {
+            CameraController.CameraUp();
+            CameraController.CameraUp();
+        }
+        else if (level >= 450 && level < 600)
+        {
+            CameraController.CameraUp();
+            CameraController.CameraUp();
+            CameraController.CameraUp();
         }
     }
     private void Update()

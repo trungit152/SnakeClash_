@@ -30,10 +30,7 @@ public class CameraController : MonoBehaviour
     }
     void Start()
     {
-        /*if (HeadController.level < 50) */newFollowOffset = new Vector3(0, 30, 0);
-        //else if(HeadController.level >= 50 && HeadController.level < 250) newFollowOffset = new Vector3(0, 47, 0);
-        //else newFollowOffset = new Vector3(0, 64, 0);
-
+        newFollowOffset = new Vector3(0, 30, 0);
     }
     void Update()
     {
@@ -41,7 +38,7 @@ public class CameraController : MonoBehaviour
     }
     public void CameraUp()
     {
-        newFollowOffset += new Vector3(0, 17, 0);
+        newFollowOffset += new Vector3(0, 18, 0);
         if (virtualCamera != null)
         {
             StartCoroutine(CameraUpSmooth(newFollowOffset));

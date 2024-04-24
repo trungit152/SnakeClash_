@@ -15,7 +15,7 @@ MonoBehaviour:
   startLevel: 5
   startSpeed: 10
   itemTime: 2.5
-  coin: 8997117
+  coin: 999999
   increseSpeedCost: 500
   increseLevelCost: 500
   increseItemCost: 500
