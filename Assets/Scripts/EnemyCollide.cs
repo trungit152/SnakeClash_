@@ -52,12 +52,15 @@ public class EnemyCollide : MonoBehaviour
     private int gap = 10;
     private float gapf = 10f;
     public int level;
+    private void Awake()
+    {
+        kingState.SetActive(false);
+    }
     private void Start()
     {
         fullFoods = GameObject.Find("FullFood");
         bodyParts = new List<GameObject>();
         positionHistory = new List<Vector3>();
-        kingState.SetActive(false);
         levelText.text = "Level " + level.ToString();
         for (int i = 0; i < 20 + level; i++)
         {
@@ -127,11 +130,10 @@ public class EnemyCollide : MonoBehaviour
             if(level > ItemSpawn.kingLevel)
             {
                 ItemSpawn.kingLevel = level;
-                //ItemSpawn.SetKing2(gameObject);
-                
+                ItemSpawn.SetKing2(gameObject);
             }
             levelText.text = "Level " + level.ToString();
-            if (level % 6 == 0)
+            if (level % 10 == 0 || (level+1) % 10 ==0)
             {
                 GrowSnake();
                 SizeGrow();
@@ -185,12 +187,6 @@ public class EnemyCollide : MonoBehaviour
             else
             {
                 Die();
-                GameObject temp = ItemSpawn.enemies[Random.Range(0, ItemSpawn.enemies.Count)];
-                while (temp == gameObject)
-                {
-                    temp = ItemSpawn.enemies[Random.Range(0, ItemSpawn.enemies.Count)];
-                }
-                //ItemSpawn.SetKing2(temp);
                 Destroy(gameObject.transform.parent.gameObject);
             }
         }
@@ -292,7 +288,12 @@ public class EnemyCollide : MonoBehaviour
             food.transform.localScale = RandomScale(gameObject);
             food.transform.SetParent(fullFoods.transform);
         }
-        ItemSpawn.SpawnEnemy(level/2);
+        ItemSpawn.enemies.Remove(gameObject.transform.parent.gameObject);
+        if (gameObject == ItemSpawn.king)
+        {
+            ItemSpawn.KingDie(gameObject);
+        }
+        ItemSpawn.SpawnEnemy(Mathf.Max(level/2, level-50));
         bodyFoods.Insert(0, gameObject.transform.position);
     }
     private Vector3 RandomPos(GameObject body)

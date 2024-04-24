@@ -46,25 +46,41 @@ public class ItemSpawn : MonoBehaviour
         for (int i = 0; i < 35; i++)
         {
             int level = Random.Range(3, 15);
-            Debug.Log(i + ": " + level);
             SpawnEnemy(level);
             if (level > kingLevel)
             {
                 kingLevel = level;
                 king = enemies[i].transform.GetChild(0).gameObject;
                 Pointer.SetKing(king);
-                Debug.Log("Lan thu: " + i);
             }
         }
+    }
+    private void Start()
+    {
         king.transform.GetChild(1).gameObject.SetActive(true);
     }
-    //public void SetKing2(GameObject king2)
-    //{
-    //    Pointer.SetKing(king);
-    //    king.transform.GetChild(1).gameObject.SetActive(false);
-    //    king = king2;
-    //    king.transform.GetChild(1).gameObject.SetActive(true);
-    //}
+    public void SetKing2(GameObject king2)
+    {
+        Pointer.SetKing(king);
+        king.transform.GetChild(1).gameObject.SetActive(false);
+        king = king2;
+        king.transform.GetChild(1).gameObject.SetActive(true);
+    }
+    public void KingDie(GameObject currentKing)
+    {
+        kingLevel = 0;
+        Debug.Log("lan thu -1");
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            GameObject enemyi = enemies[i].transform.GetChild(0).gameObject;
+            Debug.Log("lan thu " + i);
+            EnemyCollide enemy = enemyi.GetComponent<EnemyCollide>();
+            if(enemyi!= currentKing && enemy.level > kingLevel)
+            {
+                SetKing2(enemyi);
+            }
+        }
+    }
     private void Update()
     {
         cd -= Time.deltaTime;

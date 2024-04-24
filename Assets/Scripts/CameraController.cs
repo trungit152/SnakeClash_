@@ -5,12 +5,14 @@ using DG.Tweening;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField] private DataSO data;
     public CinemachineVirtualCamera virtualCamera;
     public Vector3 newFollowOffset;
 
     private float changeDuration = 2f;
 
     private HeadController headController;
+    
     private HeadController HeadController
     {
         get
@@ -28,9 +30,9 @@ public class CameraController : MonoBehaviour
     }
     void Start()
     {
-        if(HeadController.level < 50) newFollowOffset = new Vector3(0, 30, 0);
-        else if(HeadController.level >= 50 && HeadController.level < 250) newFollowOffset = new Vector3(0, 47, 0);
-        else newFollowOffset = new Vector3(0, 64, 0);
+        /*if (HeadController.level < 50) */newFollowOffset = new Vector3(0, 30, 0);
+        //else if(HeadController.level >= 50 && HeadController.level < 250) newFollowOffset = new Vector3(0, 47, 0);
+        //else newFollowOffset = new Vector3(0, 64, 0);
 
     }
     void Update()

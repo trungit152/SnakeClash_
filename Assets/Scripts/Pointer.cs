@@ -8,7 +8,6 @@ public class Pointer : MonoBehaviour
 {
     [SerializeField] private GameObject playerHead;
     private GameObject targetPos;
-    private Vector3 flexTarget;
     private RectTransform pointerRectTransform;
     private float angle;
     public Camera mainCamera;
@@ -72,7 +71,6 @@ public class Pointer : MonoBehaviour
     public void SetKing(GameObject king)
     { 
         targetPos = king;
-        flexTarget = king.transform.position + king.transform.GetChild(0).gameObject.transform.position;
     }
     public void GetKingPosition()
     {

@@ -79,6 +79,7 @@ public class HeadController : MonoBehaviour
     public void SetStat()
     {
         moveSpeed = data.startSpeed;
+        MovementController.movementSpeed = data.startSpeed;
         level = data.startLevel;
         itemTime = data.itemTime;
         levelText.text = "Level " + level.ToString();
@@ -137,7 +138,7 @@ public class HeadController : MonoBehaviour
             gap = (int)gapf;
         }
         moveSpeed += 0.05f;
-        MovementController.instance.IncreseSpeed();
+        MovementController.IncreseSpeed(); 
         Time.fixedDeltaTime = 0.008f + (float)bodyParts.Count() * 0.01f / 120f;
     }
 

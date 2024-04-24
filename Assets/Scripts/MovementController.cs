@@ -5,7 +5,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] private VariableJoystick joystick;
     [SerializeField] private GameObject snakeHead;
     [SerializeField] private Canvas inputCanvas;
-    [SerializeField] private float movementSpeed;
+    public float movementSpeed;
     [SerializeField] private DataSO data;
 
     private float canMove = 0;
@@ -23,7 +23,6 @@ public class MovementController : MonoBehaviour
     }
     private void Start()
     {
-        movementSpeed = data.startSpeed;
         movementDirection = new Vector3(0, 0, 1);
         EnableJoystickInput();
     }
