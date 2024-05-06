@@ -5,30 +5,31 @@ TagManager:
   serializedVersion: 2
   tags:
   - PlayerBody
-  - PlayerHead
+  - SpeedUp
+  - Body
+  - Head
+  - Magnite
   - Wall
   - Food
-  - Head
-  - Body
-  - SpeedUp
-  - Magnite
-  - 90deg
-  - -90deg
   - 180deg
+  - -90deg
+  - 90deg
   - 0deg
+  - PlayerHead
+  - HitBox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - PlayerHead
+  - PlayerBody
   - Water
   - UI
-  - wall
-  - PlayerBody
-  - Body
+  - PlayerHead
   - Head
-  - 
-  - 
+  - Body
+  - Minimap
+  - cage
+  - HitBox
   - 
   - 
   - 

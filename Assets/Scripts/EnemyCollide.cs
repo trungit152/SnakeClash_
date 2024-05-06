@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using TMPro; 
+using TMPro;
 
 public class EnemyCollide : MonoBehaviour
 {
@@ -13,12 +13,16 @@ public class EnemyCollide : MonoBehaviour
     [SerializeField] GameObject kingState;
     [SerializeField] private GameObject fullFoods;
     [SerializeField] private TextMeshPro levelText;
+    [SerializeField] private DataSO data;
 
     private List<Vector3> bodyFoods;
     private List<GameObject> bodyParts;
     private List<Vector3> positionHistory;
-    private float speedUpAdd = 10f;
+    private float speedUpAdd = 7f;
     private float itemTime = 3f;
+
+    public string enemyName;
+
     private NavigationScript nav;
     private NavigationScript Nav
     {
@@ -37,7 +41,7 @@ public class EnemyCollide : MonoBehaviour
     {
         get
         {
-            if(itemSpawn == null)
+            if (itemSpawn == null)
             {
                 itemSpawn = GameObject.Find("FoodController").GetComponent<ItemSpawn>();
             }
@@ -46,6 +50,23 @@ public class EnemyCollide : MonoBehaviour
         set
         {
             itemSpawn = value;
+        }
+    }
+
+    private RankingController rankingController;
+    private RankingController RankingController
+    {
+        get
+        {
+            if (rankingController == null)
+            {
+                rankingController = GameObject.Find("RankingController").gameObject.GetComponent<RankingController>();
+            }
+            return rankingController;
+        }
+        set
+        {
+            rankingController = value;
         }
     }
 
@@ -58,10 +79,13 @@ public class EnemyCollide : MonoBehaviour
     }
     private void Start()
     {
-        fullFoods = GameObject.Find("FullFood");
+        moveSpeed = 10f;
+        Nav.movementSpeed = 10f;
+        name = enemyName;
+        fullFoods = GameObject.Find("FullFoods");
         bodyParts = new List<GameObject>();
         positionHistory = new List<Vector3>();
-        levelText.text = "Level " + level.ToString();
+        levelText.text = enemyName + ": " + level.ToString();
         for (int i = 0; i < 20 + level; i++)
         {
             if (i % 5 == 0)
@@ -84,7 +108,7 @@ public class EnemyCollide : MonoBehaviour
     private void MoveBody()
     {
         positionHistory.Insert(0, transform.position);
-        if(positionHistory.Count > 1000)
+        if (positionHistory.Count > 1000)
         {
             positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
         }
@@ -101,39 +125,43 @@ public class EnemyCollide : MonoBehaviour
     private void GrowSnake()
     {
         //Gioi han so body
-        if(bodyParts.Count < 60) 
+        if (bodyParts.Count < 60)
         {
             GameObject body = Instantiate(bodyPrefabs);
             if (bodyParts.Count() != 0)
             {
-                body.transform.localScale = bodyParts[0].transform.localScale;
-                body.transform.position = bodyParts[0].transform.position;
+                body.transform.localScale = bodyParts[bodyParts.Count()-1].transform.localScale;
+                body.transform.position = bodyParts[bodyParts.Count()-1].transform.position;
+                bodyParts.Insert(bodyParts.Count() - 1, body);
             }
             else
             {
                 body.transform.position = this.transform.position;
+                bodyParts.Insert(0, body);
             }
-            bodyParts.Insert(0, body);
             body.transform.SetParent(fullBody.transform);
-            gapf += 0.04f;
+            gapf += 0.05f;
             gap = (int)gapf;
         }
-        moveSpeed += 0.05f;
-        Nav.IncreseSpeed();
+        if (moveSpeed < 25f)
+        {
+            moveSpeed += 0.04f;
+            Nav.IncreseSpeed();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Food"))
         {
-            level+=2;
-            if(level > ItemSpawn.kingLevel)
+            level += 2;
+            if (level > ItemSpawn.kingLevel)
             {
                 ItemSpawn.kingLevel = level;
                 ItemSpawn.SetKing2(gameObject);
             }
-            levelText.text = "Level " + level.ToString();
-            if (level % 10 == 0 || (level+1) % 10 ==0)
+            levelText.text = enemyName +": " + level.ToString();
+            if (level % 10 == 0 || (level + 1) % 10 == 0)
             {
                 GrowSnake();
                 SizeGrow();
@@ -207,8 +235,9 @@ public class EnemyCollide : MonoBehaviour
     }
     private void MoveAfterBite(List<Vector3> foods)
     {
-        for (int i = 0; i < foods.Count; i++)
+        if (foods.Count >= 5)
         {
+            int i = foods.Count - 5;
             Vector3 res = foods[i] - gameObject.transform.position;
             Nav.Busy();
             Nav.SetAngle(Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg);
@@ -293,7 +322,9 @@ public class EnemyCollide : MonoBehaviour
         {
             ItemSpawn.KingDie(gameObject);
         }
-        ItemSpawn.SpawnEnemy(Mathf.Max(level/2, level-50));
+        
+        RankingController.enemiesRank.Remove(gameObject.transform.parent.gameObject);       
+        ItemSpawn.SpawnEnemy(Mathf.Max(level / 2, level - 50));
         bodyFoods.Insert(0, gameObject.transform.position);
     }
     private Vector3 RandomPos(GameObject body)

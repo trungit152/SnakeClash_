@@ -7,12 +7,13 @@ public class ItemSpawn : MonoBehaviour
     [SerializeField] private GameObject magnite;
     [SerializeField] private GameObject enemy;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private DataSO data;
 
     public List<GameObject> enemies;
     public int kingLevel;
     //[SerializeField] private Camera cameraSite;
     public GameObject king;
-    private float cd = 5f;
+    private float cd = 10f;
     private float maxX;
     private float minX;
     private float minZ;
@@ -35,13 +36,30 @@ public class ItemSpawn : MonoBehaviour
         }
     }
 
+    private RankingController rankingController;
+    private RankingController RankingController
+    {
+        get
+        {
+            if(rankingController == null)
+            {
+                rankingController = GameObject.Find("RankingController").gameObject.GetComponent<RankingController>();
+            }
+            return rankingController;
+        }
+        set
+        {
+            rankingController = value;
+        }
+    }
+
     private void Awake()
     {
         enemies = new List<GameObject>();
-        maxX = 149;
-        minX = -149;
-        maxZ = 149;
-        minZ = -149;
+        maxX = 85;
+        minX = -85;
+        maxZ = 85;
+        minZ = -85;
         kingLevel = 0;
         for (int i = 0; i < 35; i++)
         {
@@ -86,7 +104,7 @@ public class ItemSpawn : MonoBehaviour
         cd -= Time.deltaTime;
         if(cd < 0)
         {
-            cd = 5f;
+            cd = 10f;
             Spawn();
         }
     }
@@ -119,7 +137,9 @@ public class ItemSpawn : MonoBehaviour
     {
         GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
         enemies.Add(enemySpawn);
+        RankingController.enemiesRank.Add(enemySpawn);  
         EnemyCollide enemyCollide = enemy.transform.GetChild(0).GetComponent<EnemyCollide>();
+        enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
         enemyCollide.level = level;
     }
 

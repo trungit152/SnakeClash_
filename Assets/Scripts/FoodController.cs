@@ -1,28 +1,29 @@
-using UnityEngine;
-
+﻿using UnityEngine;
+using DG.Tweening;
+using ParadoxNotion.Design;
 public class FoodController : MonoBehaviour
 {
     public static FoodController instance;
-    //private EnemyMove2 enemyMove2;
-    //private EnemyMove2 EnemyMove2
-    //{
-    //    get
-    //    {
-    //        if (enemyMove2 == null)
-    //        {
-    //            enemyMove2 = GameObject.Find("Enemy").transform.GetChild(0).GetComponent<EnemyMove2>();
-    //        }
-    //        return enemyMove2;
-    //    }
-    //    set
-    //    {
-    //        enemyMove2 = value;
-    //    }
-    //}
+    public float speed = 15f;
+    private bool isBit;
+    private Vector3 target;
     private void Awake()
     {
         instance = this;
-        //data.foods.Clear();
+        isBit = false;
+    }
+    private void Update()
+    {
+        if (isBit && gameObject != null)
+        {
+            Vector3 direction = target - transform.position;
+            float distance = direction.magnitude;
+            if (distance > 0.01f)
+            {
+                Vector3 moveDirection = direction.normalized * speed * Time.deltaTime;
+                transform.Translate(moveDirection, Space.World);
+            }
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -36,8 +37,12 @@ public class FoodController : MonoBehaviour
             NavigationScript nav = other.GetComponent<NavigationScript>();
             nav.RemoveTarget();
             SpawnFood.instance.foods.Remove(gameObject);
-            //EnemyMove2.nearFoods.Remove(gameObject);
             Destroy(gameObject);
+        }
+        if (other.CompareTag("HitBox"))
+        {
+            isBit = true;
+            target = other.transform.position;
         }
 
     }

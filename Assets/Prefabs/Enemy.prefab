@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 2759763945292085262}
   - component: {fileID: 2759763945292085744}
   - component: {fileID: 6063659018110539173}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Head
   m_TagString: Head
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!114 &2759763945292085263
 MonoBehaviour:
@@ -353,8 +353,10 @@ MonoBehaviour:
   foodPrefabs: {fileID: 5263689502216949429, guid: 3fd0846fd2d8915419df3ab3aee06ca1,
     type: 3}
   kingState: {fileID: 4149349216168398029}
-  fullFoods: {fileID: 0}
+  fullFoods: {fileID: 2736951739408050575, guid: 13c66b40ecb4d174697690152c0c9055,
+    type: 3}
   levelText: {fileID: 2031064791}
+  enemyName: 
   level: 14
 --- !u!114 &2759763945292085744
 MonoBehaviour:

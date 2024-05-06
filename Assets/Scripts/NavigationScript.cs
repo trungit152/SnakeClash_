@@ -11,7 +11,7 @@ public class NavigationScript : MonoBehaviour
     private Rigidbody rb;
     private Vector3 movementDirection;
     public float targetAngle;
-    private float movementSpeed;
+    public float movementSpeed;
     private Vector3 res;
     private float stunned;
 
@@ -23,12 +23,12 @@ public class NavigationScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         stunned = 0;
         movementDirection = new Vector3(0,0,1); 
-        movementSpeed = 10f;
         targetAngle = 0;
     }
     private void Update()
     {
         FindFood();
+       
     }
     private void FindFood()
     {
@@ -56,12 +56,13 @@ public class NavigationScript : MonoBehaviour
             else stunned = 0;
         }
         rb.transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
-        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 1f);
 
     }
     public void Stun()
     {
         targetAngle += 180f;
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
         stunned = 1f;
         foodTarget = null;
     }
@@ -98,11 +99,12 @@ public class NavigationScript : MonoBehaviour
     }
     public void IncreseSpeed()
     {
-        movementSpeed += 0.05f;
+        movementSpeed += 0.04f;
     }
     public void SetAngle(float value)
     {
         targetAngle = value;
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 120f);
     }
     public void SpeedUp(float add)
     {

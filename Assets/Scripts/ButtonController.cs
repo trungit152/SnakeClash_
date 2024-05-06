@@ -12,6 +12,22 @@ public class ButtonController : MonoBehaviour
     [SerializeField] private Text coinText;
     [SerializeField] DataSO data;
 
+    MinimapController minimapController;
+    MinimapController MinimapController
+    {
+        get
+        {
+            if (minimapController == null)
+            {
+                minimapController = GameObject.Find("MinimapCamera").GetComponent<MinimapController>();
+            }
+            return minimapController;
+        }
+        set
+        {
+            minimapController = value;
+        }
+    }
     private HeadController headController;
     private HeadController HeadController
     {
@@ -28,6 +44,22 @@ public class ButtonController : MonoBehaviour
             headController = value;
         }
     }
+    private RankingController rankingController;
+    private RankingController RankingController
+    {
+        get
+        {
+            if (rankingController == null)
+            {
+                rankingController = GameObject.Find("RankingController").gameObject.GetComponent<RankingController>();
+            }
+            return rankingController;
+        }
+        set
+        {
+            rankingController = value;
+        }
+    }
     private void Start()
     {
         increseLevelText.text = "Cost: " + data.increseLevelCost.ToString();
@@ -35,15 +67,18 @@ public class ButtonController : MonoBehaviour
         increseItemText.text = "Cost: " + data.increseItemCost.ToString();
         coinText.text = "Coin: " + data.coin.ToString();
     }
+
     public void PlayClick()
     {
         Time.timeScale = 1.0f;
         HeadController.SetStat();
         startPanel.SetActive(false);
+        MinimapController.ShowMinimap();
     }
     public void PlayAgainClick()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
     }
     public void IncreseSpeedClick()
     {

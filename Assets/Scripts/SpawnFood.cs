@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class SpawnFood : MonoBehaviour
 {
-    [SerializeField] private int size = 300;
+    [SerializeField] private int size = 175;
     [SerializeField] private GameObject foodPrefabs;
     [SerializeField] private GameObject fullFood;
 
@@ -60,8 +60,7 @@ public class SpawnFood : MonoBehaviour
     }
     private void Update()
     {
-        Spawn();
-        if (Input.GetKeyDown(KeyCode.Q))
+        if(foods.Count < 200)
         {
             Spawn();
         }

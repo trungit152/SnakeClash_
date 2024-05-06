@@ -28,6 +28,23 @@ public class CameraController : MonoBehaviour
             headController = value;
         }
     }
+
+    MinimapController minimapController;
+    MinimapController MinimapController
+    {
+        get
+        {
+            if(minimapController == null)
+            {
+                minimapController = GameObject.Find("MinimapCamera").GetComponent<MinimapController>();
+            }
+            return minimapController;
+        }
+        set
+        {
+            minimapController = value;
+        }
+    }
     void Start()
     {
         newFollowOffset = new Vector3(0, 30, 0);
@@ -42,6 +59,7 @@ public class CameraController : MonoBehaviour
         if (virtualCamera != null)
         {
             StartCoroutine(CameraUpSmooth(newFollowOffset));
+            MinimapController.MiniCameraUp();
         }
     }
     IEnumerator CameraUpSmooth(Vector3 targetFollowOffset)

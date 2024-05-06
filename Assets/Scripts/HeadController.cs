@@ -16,6 +16,14 @@ public class HeadController : MonoBehaviour
     [SerializeField] GameObject foodPrefabs;
     [SerializeField] private DataSO data;
     [SerializeField] private GameObject losePanel;
+    [SerializeField] private TextMeshProUGUI top1Text;
+    [SerializeField] private TextMeshProUGUI top2Text;
+    [SerializeField] private TextMeshProUGUI top3Text;
+    [SerializeField] private TextMeshProUGUI playerRankText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject rankingPanel;
+    [SerializeField] private GameObject hitBox;
+    [SerializeField] private GameObject inGameRankingPanel;
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
@@ -24,10 +32,12 @@ public class HeadController : MonoBehaviour
     private List<Vector3> positionHistory;
     private int gap = 10;
     private float gapf = 10f;
-    private float speedUpAdd = 10f;
+    private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
+    private bool isMagnite;
     public int level = 5;
+    private float levelf = 5;
     private MovementController movementController;
     private MovementController MovementController
     {
@@ -60,14 +70,48 @@ public class HeadController : MonoBehaviour
             cameraController = value;
         }
     }
+    MinimapController minimapController;
+    MinimapController MinimapController
+    {
+        get
+        {
+            if (minimapController == null)
+            {
+                minimapController = GameObject.Find("MinimapCamera").GetComponent<MinimapController>();
+            }
+            return minimapController;
+        }
+        set
+        {
+            minimapController = value;
+        }
+    }
+    private RankingController rankingController;
+    private RankingController RankingController
+    {
+        get
+        {
+            if (rankingController == null)
+            {
+                rankingController = GameObject.Find("RankingController").gameObject.GetComponent<RankingController>();
+            }
+            return rankingController;
+        }
+        set
+        {
+            rankingController = value;
+        }
+    }
     private void Awake()
     {
         isSpeedUp = false;
+        isMagnite = false;
         instance = this;
         Time.fixedDeltaTime = 0.008f;
     }
     private void Start()
     {
+        inGameRankingPanel.SetActive(false);
         level = data.startLevel;
         Debug.Log("Head " + level);
         bodyParts = new List<GameObject>();
@@ -80,6 +124,7 @@ public class HeadController : MonoBehaviour
     public void SetStat()
     {
         moveSpeed = data.startSpeed;
+        inGameRankingPanel.SetActive(true);
         MovementController.movementSpeed = data.startSpeed;
         level = data.startLevel;
         itemTime = data.itemTime;
@@ -141,20 +186,24 @@ public class HeadController : MonoBehaviour
             GameObject body = Instantiate(bodyPrefabs);
             if (bodyParts.Count() != 0)
             {
-                body.transform.localScale = bodyParts[0].transform.localScale;
-                body.transform.position = bodyParts[0].transform.position;
+                body.transform.localScale = bodyParts[bodyParts.Count-1].transform.localScale;
+                body.transform.position = bodyParts[bodyParts.Count - 1].transform.position;
+                bodyParts.Insert(bodyParts.Count - 1, body);
             }
             else
             {
                 body.transform.position = firstBody.transform.position;
+                bodyParts.Insert(0, body);
             }
-            bodyParts.Insert(0, body);
             body.transform.SetParent(fullBody.transform);
-            gapf += 0.04f;
+            gapf += 0.05f;
             gap = (int)gapf;
         }
-        moveSpeed += 0.05f;
-        MovementController.IncreseSpeed(); 
+        if(moveSpeed < 25f)
+        {
+            moveSpeed += 0.04f;
+            MovementController.IncreseSpeed();
+        }
         Time.fixedDeltaTime = 0.008f + (float)bodyParts.Count() * 0.01f / 120f;
     }
 
@@ -162,10 +211,12 @@ public class HeadController : MonoBehaviour
     {
         if (other.CompareTag("Food"))
         {
-            level++;
+            levelf += 0.5f;
+            level = (int)levelf;
             if (level == 50 || level == 200 || level == 450 || level == 600)
             {
                 CameraController.CameraUp();
+                MinimapController.MiniCameraUp();
             }
             levelText.text = "Level " + level.ToString();
             if (level % 5 == 0)
@@ -192,6 +243,7 @@ public class HeadController : MonoBehaviour
         }
         if (other.CompareTag("Magnite"))
         {
+            Magnite();
         }
     }
     private void SpeedUp()
@@ -203,10 +255,10 @@ public class HeadController : MonoBehaviour
             gap -= (int)speedUpAdd / 3;
             gapf -= speedUpAdd / 3;
             isSpeedUp = true;
-            StartCoroutine(Wait());
+            StartCoroutine(Wait3s());
         }
     } 
-    IEnumerator Wait()
+    IEnumerator Wait3s()
     {
         yield return new WaitForSeconds(itemTime);
         gap += (int)speedUpAdd / 3;
@@ -214,6 +266,21 @@ public class HeadController : MonoBehaviour
         moveSpeed -= speedUpAdd;
         MovementController.SpeedDown(speedUpAdd);
         isSpeedUp = false;
+    }
+    private void Magnite()
+    {
+        if (!isMagnite)
+        {
+            CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
+            hitBoxCol.radius *= 2;
+            StartCoroutine(Wait2s());
+        }
+    }
+    IEnumerator Wait2s()
+    {
+        yield return new WaitForSeconds(1f);
+        CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
+        hitBoxCol.radius /= 2;
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -267,6 +334,11 @@ public class HeadController : MonoBehaviour
             }
         }
     }
+
+    public void TurnOffLevelText()
+    {
+        levelText.text = null;
+    }
     public void Die()
     {
         for (int i = bodyParts.Count() - 1; i >= 0; i--)
@@ -277,6 +349,15 @@ public class HeadController : MonoBehaviour
         data.coin += level;
         Destroy(gameObject);
         losePanel.SetActive(true);
+        MinimapController.HideMinimap();
+        top1Text.text = RankingController.top1Text.text;
+        top2Text.text = RankingController.top2Text.text;
+        top3Text.text = RankingController.top3Text.text;
+        playerRankText.text = RankingController.playerRankText.text;
+        scoreText.text = "Your Score: " + level;
+        rankingPanel.SetActive(true);
+        RankingController.TurnOffText();
+        levelText.text = null;
         Time.timeScale = 0f;
     }
     private Vector3 RandomPos(GameObject body)

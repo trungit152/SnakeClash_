@@ -43,7 +43,7 @@ public class BossController : MonoBehaviour
     }
     private void Move()
     {
-        rb.transform.Translate(movementDirection * moveSpeed * Time.deltaTime);
+        rb.transform.Translate(movementDirection * Time.deltaTime * moveSpeed);
         rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
     }
 }
