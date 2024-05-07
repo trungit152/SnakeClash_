@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodyPrefabs: {fileID: 545327525959892647, guid: 2719ae8ef49eb6e4aafb82f26e55a5a6,
     type: 3}
-  moveSpeed: 10
+  moveSpeed: 8
   fullBody: {fileID: 2759763944975939161}
   foodPrefabs: {fileID: 5263689502216949429, guid: 3fd0846fd2d8915419df3ab3aee06ca1,
     type: 3}
@@ -356,6 +356,7 @@ MonoBehaviour:
   fullFoods: {fileID: 2736951739408050575, guid: 13c66b40ecb4d174697690152c0c9055,
     type: 3}
   levelText: {fileID: 2031064791}
+  data: {fileID: 0}
   enemyName: 
   level: 14
 --- !u!114 &2759763945292085744
@@ -371,6 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAngle: 0
+  movementSpeed: 0
   isTarget: 0
 --- !u!114 &6063659018110539173
 MonoBehaviour:

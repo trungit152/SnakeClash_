@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 public class TimeController : MonoBehaviour
 {
-    [SerializeField] private Text timeText;
+    [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private GameObject losePanel;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private DataSO data;
@@ -14,6 +14,7 @@ public class TimeController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI top3Text;
     [SerializeField] private TextMeshProUGUI playerRankText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject rankingPanel;
 
     private float time;
@@ -85,6 +86,7 @@ public class TimeController : MonoBehaviour
         {
             time = 0;
             MinimapController.HideMinimap();
+            inGameUI.SetActive(false);
             top1Text.text = RankingController.top1Text.text;
             top2Text.text = RankingController.top2Text.text;
             top3Text.text = RankingController.top3Text.text;

@@ -22,16 +22,16 @@ public class HeadController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerRankText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private GameObject rankingPanel;
-    [SerializeField] private GameObject hitBox;
     [SerializeField] private GameObject inGameRankingPanel;
+    [SerializeField] private GameObject inGameUI;
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
     
     private List<GameObject> bodyParts;
     private List<Vector3> positionHistory;
-    private int gap = 10;
-    private float gapf = 10f;
+    private int gap = 5;
+    private float gapf = 5f;
     private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
@@ -187,8 +187,8 @@ public class HeadController : MonoBehaviour
             if (bodyParts.Count() != 0)
             {
                 body.transform.localScale = bodyParts[bodyParts.Count-1].transform.localScale;
-                body.transform.position = bodyParts[bodyParts.Count - 1].transform.position;
-                bodyParts.Insert(bodyParts.Count - 1, body);
+                body.transform.position = firstBody.transform.position;
+                bodyParts.Insert(0, body);
             }
             else
             {
@@ -199,9 +199,9 @@ public class HeadController : MonoBehaviour
             gapf += 0.05f;
             gap = (int)gapf;
         }
-        if(moveSpeed < 25f)
+        if (moveSpeed < 22f)
         {
-            moveSpeed += 0.04f;
+            moveSpeed += 0.035f;
             MovementController.IncreseSpeed();
         }
         Time.fixedDeltaTime = 0.008f + (float)bodyParts.Count() * 0.01f / 120f;
@@ -304,7 +304,7 @@ public class HeadController : MonoBehaviour
             transform.localScale += new Vector3(0.02f, 0.02f, 0.02f);
             for (int i = 0; i < bodyParts.Count(); i++)
             {
-                bodyParts[i].transform.localScale = transform.localScale / 2;
+                bodyParts[i].transform.localScale = transform.localScale;
             }
             transform.position = Vector3.MoveTowards(transform.position,
                 new Vector3(transform.position.x, transform.position.y + 0.01f, transform.position.z), 20f * Time.deltaTime);
@@ -321,7 +321,7 @@ public class HeadController : MonoBehaviour
             {
                 for (int j = bodyParts.Count - 1; j >= i; j--)
                 {
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < 2; k++)
                     {
                         GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[j]), Quaternion.identity);
                         food.transform.localScale = RandomScale(bodyParts[j]);
@@ -356,6 +356,7 @@ public class HeadController : MonoBehaviour
         playerRankText.text = RankingController.playerRankText.text;
         scoreText.text = "Your Score: " + level;
         rankingPanel.SetActive(true);
+        inGameUI.SetActive(false);
         RankingController.TurnOffText();
         levelText.text = null;
         Time.timeScale = 0f;

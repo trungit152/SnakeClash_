@@ -6,7 +6,7 @@ using UnityEngine;
 public class DataSO : ScriptableObject
 {
     public int startLevel = 5;
-    public float startSpeed = 10f;
+    public float startSpeed = 8f;
     public float itemTime = 2.5f;
     public int coin = 9999999;
     public int increseSpeedCost = 500;

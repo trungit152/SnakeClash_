@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DataSO
   m_EditorClassIdentifier: 
   startLevel: 5
-  startSpeed: 10
+  startSpeed: 8
   itemTime: 2.5
-  coin: 1712
+  coin: 4385
   increseSpeedCost: 500
   increseLevelCost: 500
   increseItemCost: 500
-  currentLevel: 2
+  currentLevel: 3
   names:
   - John
   - Mary

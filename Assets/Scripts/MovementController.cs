@@ -69,7 +69,7 @@ public class MovementController : MonoBehaviour
     }
     public void IncreseSpeed()
     {
-        movementSpeed += 0.04f;
+        movementSpeed += 0.035f;
     }
     public void SpeedUp(float add)
     {

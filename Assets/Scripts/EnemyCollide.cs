@@ -7,7 +7,7 @@ using TMPro;
 public class EnemyCollide : MonoBehaviour
 {
     [SerializeField] private GameObject bodyPrefabs;
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private GameObject fullBody;
     [SerializeField] GameObject foodPrefabs;
     [SerializeField] GameObject kingState;
@@ -143,9 +143,9 @@ public class EnemyCollide : MonoBehaviour
             gapf += 0.05f;
             gap = (int)gapf;
         }
-        if (moveSpeed < 25f)
+        if (moveSpeed < 22f)
         {
-            moveSpeed += 0.04f;
+            moveSpeed += 0.035f;
             Nav.IncreseSpeed();
         }
     }
@@ -247,7 +247,7 @@ public class EnemyCollide : MonoBehaviour
     {
         if (level < 600)
         {
-            transform.localScale += new Vector3(0.02f, 0.02f, 0.02f);
+            transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
             for (int i = 0; i < bodyParts.Count(); i++)
             {
                 bodyParts[i].transform.localScale = transform.localScale / 2;
@@ -266,7 +266,7 @@ public class EnemyCollide : MonoBehaviour
             {
                 for (int j = bodyParts.Count - 1; j >= i; j--)
                 {
-                    for (int k = 0; k < 3; k++)
+                    for (int k = 0; k < 2; k++)
                     {
                         GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[j]), Quaternion.identity);
                         food.transform.localScale = RandomScale(bodyParts[j]);
@@ -301,7 +301,7 @@ public class EnemyCollide : MonoBehaviour
         bodyFoods = new List<Vector3>();
         for (int i = bodyParts.Count() - 1; i >= 0; i--)
         {
-            for (int k = 0; k < 3; k++)
+            for (int k = 0; k < 2; k++)
             {
                 GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[i]), Quaternion.identity);
                 food.transform.localScale = RandomScale(bodyParts[i]);
@@ -311,7 +311,7 @@ public class EnemyCollide : MonoBehaviour
             Destroy(bodyParts[i]);
             bodyParts.RemoveAt(i);
         }
-        for (int k = 0; k < 5; k++)
+        for (int k = 0; k < 3; k++)
         {
             GameObject food = Instantiate(foodPrefabs, RandomPos(gameObject), Quaternion.identity);
             food.transform.localScale = RandomScale(gameObject);

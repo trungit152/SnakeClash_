@@ -99,7 +99,7 @@ public class NavigationScript : MonoBehaviour
     }
     public void IncreseSpeed()
     {
-        movementSpeed += 0.04f;
+        movementSpeed += 0.035f;
     }
     public void SetAngle(float value)
     {

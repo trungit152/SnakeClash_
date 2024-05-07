@@ -9,6 +9,7 @@ public class ButtonController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI increseLevelText;
     [SerializeField] private TextMeshProUGUI increseSpeedText;
     [SerializeField] private TextMeshProUGUI increseItemText;
+    [SerializeField] private GameObject inGameUI;
     [SerializeField] private Text coinText;
     [SerializeField] DataSO data;
 
@@ -71,6 +72,7 @@ public class ButtonController : MonoBehaviour
     public void PlayClick()
     {
         Time.timeScale = 1.0f;
+        inGameUI.SetActive(true);
         HeadController.SetStat();
         startPanel.SetActive(false);
         MinimapController.ShowMinimap();

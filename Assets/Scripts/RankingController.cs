@@ -70,17 +70,17 @@ public class RankingController : MonoBehaviour
                 if (i == 0)
                 {
                     top1Text.text = "Top 1 - " + enemyCollide.enemyName + ": " + enemyCollide.level.ToString();
-                    top1Text.color = Color.black;
+                    top1Text.color = Color.white;
                 }
                 else if (i == 1)
                 {
                     top2Text.text = "Top 2 - " + enemyCollide.enemyName + ": " + enemyCollide.level.ToString();
-                    top2Text.color = Color.black;
+                    top2Text.color = Color.white;
                 }
                 else
                 {
                     top3Text.text = "Top 3 - " + enemyCollide.enemyName + ": " + enemyCollide.level.ToString();
-                    top3Text.color = Color.black;
+                    top3Text.color = Color.white;
                 }
                 playerRankText.text = "Top " + (enemiesRank.IndexOf(playerHead) + 1) + " - Player: " + player.level;
                 playerRankText.color = Color.blue;
@@ -95,9 +95,9 @@ public class RankingController : MonoBehaviour
                     EnemyCollide enemy1 = enemiesRank[1].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     EnemyCollide enemy2 = enemiesRank[2].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     top2Text.text = "Top 2 - " + enemy1.enemyName + ": " + enemy1.level.ToString();
-                    top2Text.color = Color.black;
+                    top2Text.color = Color.white;
                     top3Text.text = "Top 3 - " + enemy2.enemyName + ": " + enemy2.level.ToString();
-                    top3Text.color = Color.black;
+                    top3Text.color = Color.white;
                 }
                 else if (enemiesRank.IndexOf(playerHead) == 1)
                 {
@@ -106,9 +106,9 @@ public class RankingController : MonoBehaviour
                     EnemyCollide enemy1 = enemiesRank[0].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     EnemyCollide enemy2 = enemiesRank[2].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     top1Text.text = "Top 1 - " + enemy1.enemyName + ": " + enemy1.level.ToString();
-                    top1Text.color = Color.black;
+                    top1Text.color = Color.white;
                     top3Text.text = "Top 3 - " + enemy2.enemyName + ": " + enemy2.level.ToString();
-                    top3Text.color = Color.black;
+                    top3Text.color = Color.white;
                 }
                 else if (enemiesRank.IndexOf(playerHead) == 2)
                 {
@@ -117,9 +117,9 @@ public class RankingController : MonoBehaviour
                     EnemyCollide enemy1 = enemiesRank[0].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     EnemyCollide enemy2 = enemiesRank[1].transform.GetChild(0).gameObject.GetComponent<EnemyCollide>();
                     top1Text.text = "Top 1 - " + enemy1.enemyName + ": " + enemy1.level.ToString();
-                    top1Text.color = Color.black;
+                    top1Text.color = Color.white;
                     top2Text.text = "Top 2 - " + enemy2.enemyName + ": " + enemy2.level.ToString();
-                    top2Text.color = Color.black;
+                    top2Text.color = Color.white;
                 }
             }
         }
