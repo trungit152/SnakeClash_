@@ -48,7 +48,7 @@ public class SpawnFood : MonoBehaviour
         }
         else
         {
-            float radius = rand.Next(10, 30) / 10;
+            float radius = rand.Next(20, 30) / 10;
             foodPrefabs.transform.localScale = new Vector3(radius, radius, radius);
             Vector3 randPos = new Vector3(rand.Next(-size / 2, size / 2) + (float)rand.NextDouble(), foodPrefabs.transform.localScale.x, rand.Next(-size / 2, size / 2) + (float)rand.NextDouble());
             GameObject food = Instantiate(foodPrefabs, randPos, Quaternion.identity);

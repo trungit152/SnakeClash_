@@ -15,7 +15,6 @@ public class HeadController : MonoBehaviour
     [SerializeField] private GameObject firstBody;
     [SerializeField] GameObject foodPrefabs;
     [SerializeField] private DataSO data;
-    [SerializeField] private GameObject losePanel;
     [SerializeField] private TextMeshProUGUI top1Text;
     [SerializeField] private TextMeshProUGUI top2Text;
     [SerializeField] private TextMeshProUGUI top3Text;
@@ -348,15 +347,15 @@ public class HeadController : MonoBehaviour
         }
         data.coin += level;
         Destroy(gameObject);
-        losePanel.SetActive(true);
         MinimapController.HideMinimap();
         top1Text.text = RankingController.top1Text.text;
         top2Text.text = RankingController.top2Text.text;
         top3Text.text = RankingController.top3Text.text;
         playerRankText.text = RankingController.playerRankText.text;
-        scoreText.text = "Your Score: " + level;
+        scoreText.text = level.ToString();
         rankingPanel.SetActive(true);
         inGameUI.SetActive(false);
+        inGameRankingPanel.SetActive(false);
         RankingController.TurnOffText();
         levelText.text = null;
         Time.timeScale = 0f;

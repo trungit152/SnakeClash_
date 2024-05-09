@@ -335,7 +335,7 @@ public class EnemyCollide : MonoBehaviour
     }
     private Vector3 RandomScale(GameObject body)
     {
-        float rd = Random.Range(-400, 100) / 1000f;
+        float rd = Random.Range(500, 1000) / 1000f;
         Vector3 scale = new Vector3(body.transform.localScale.x + rd, body.transform.localScale.y + rd, body.transform.localScale.z + rd);
         return scale;
     }

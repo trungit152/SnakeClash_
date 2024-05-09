@@ -10,8 +10,11 @@ public class ButtonController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI increseSpeedText;
     [SerializeField] private TextMeshProUGUI increseItemText;
     [SerializeField] private GameObject inGameUI;
-    [SerializeField] private Text coinText;
+    [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] DataSO data;
+    [SerializeField] private Button btnRestart;
+
+
 
     MinimapController minimapController;
     MinimapController MinimapController
@@ -61,14 +64,23 @@ public class ButtonController : MonoBehaviour
             rankingController = value;
         }
     }
+
+    private void Awake()
+    {
+        btnRestart.onClick.AddListener(PlayAgainClick);
+
+    }
     private void Start()
     {
         increseLevelText.text = "Cost: " + data.increseLevelCost.ToString();
         increseSpeedText.text = "Cost: " + data.increseSpeedCost.ToString();
         increseItemText.text = "Cost: " + data.increseItemCost.ToString();
-        coinText.text = "Coin: " + data.coin.ToString();
+        coinText.text = data.coin.ToString();
     }
-
+    public void GoToPlayClick()
+    {
+        SceneManager.LoadScene("InGameScene");
+    }
     public void PlayClick()
     {
         Time.timeScale = 1.0f;
@@ -115,6 +127,9 @@ public class ButtonController : MonoBehaviour
             increseItemText.text = "Cost: " + data.increseItemCost.ToString();
             coinText.text = "Coin: " + data.coin.ToString();
         }
-
+    }
+    public void HomeButtonClick()
+    {
+        SceneManager.LoadScene("HomeScene");
     }
 }
