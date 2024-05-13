@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     public CinemachineVirtualCamera virtualCamera;
     public Vector3 newFollowOffset;
 
-    private float changeDuration = 2f;
+    private float changeDuration = 0.7f;
 
     private HeadController headController;
     
@@ -53,12 +53,14 @@ public class CameraController : MonoBehaviour
     {
 
     }
+
+    Coroutine test;
     public void CameraUp()
     {
         newFollowOffset += new Vector3(0, 18, 0);
         if (virtualCamera != null)
         {
-            StartCoroutine(CameraUpSmooth(newFollowOffset));
+            test = StartCoroutine(CameraUpSmooth(newFollowOffset));
             MinimapController.MiniCameraUp();
         }
     }
@@ -72,7 +74,7 @@ public class CameraController : MonoBehaviour
             Vector3 newFollowOffset = Vector3.Lerp(initialFollowOffset, targetFollowOffset, elapsedTime / changeDuration);
             virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = newFollowOffset;
             elapsedTime += Time.deltaTime;
-            yield return null;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
         virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = targetFollowOffset;
     }

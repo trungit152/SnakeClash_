@@ -13,8 +13,8 @@ public class HomeButton : MonoBehaviour
     {
         playBtn.onClick.AddListener(PlayClick);
         skinBtn.onClick.AddListener(SkinClick);
+        
     }
-
     private void SkinClick()
     {
         SceneManager.LoadScene("SkinScene");
@@ -23,8 +23,9 @@ public class HomeButton : MonoBehaviour
     private void PlayClick()
     {
         SceneManager.LoadScene("InGameScene");
+        Time.timeScale = 0f;
     }
-
+    
 
     void Start()
     {

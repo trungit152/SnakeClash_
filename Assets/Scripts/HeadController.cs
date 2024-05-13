@@ -15,10 +15,19 @@ public class HeadController : MonoBehaviour
     [SerializeField] private GameObject firstBody;
     [SerializeField] GameObject foodPrefabs;
     [SerializeField] private DataSO data;
-    [SerializeField] private TextMeshProUGUI top1Text;
-    [SerializeField] private TextMeshProUGUI top2Text;
-    [SerializeField] private TextMeshProUGUI top3Text;
-    [SerializeField] private TextMeshProUGUI playerRankText;
+    [SerializeField] private TextMeshProUGUI top1Name;
+    [SerializeField] private TextMeshProUGUI top1Score;
+    [SerializeField] private TextMeshProUGUI top2Name;
+    [SerializeField] private TextMeshProUGUI top2Score;
+    [SerializeField] private TextMeshProUGUI top3Name;
+    [SerializeField] private TextMeshProUGUI top3Score;
+    //[SerializeField] private TextMeshProUGUI top4Name;
+    //[SerializeField] private TextMeshProUGUI top4Score;
+    //[SerializeField] private TextMeshProUGUI top5Name;
+    //[SerializeField] private TextMeshProUGUI top5Score;
+    [SerializeField] private TextMeshProUGUI playerRank;
+    [SerializeField] private TextMeshProUGUI playerName;
+    [SerializeField] private TextMeshProUGUI playerScore;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private GameObject rankingPanel;
     [SerializeField] private GameObject inGameRankingPanel;
@@ -26,7 +35,8 @@ public class HeadController : MonoBehaviour
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
-    
+
+    private Sprite headSkin;
     private List<GameObject> bodyParts;
     private List<Vector3> positionHistory;
     private int gap = 5;
@@ -348,10 +358,15 @@ public class HeadController : MonoBehaviour
         data.coin += level;
         Destroy(gameObject);
         MinimapController.HideMinimap();
-        top1Text.text = RankingController.top1Text.text;
-        top2Text.text = RankingController.top2Text.text;
-        top3Text.text = RankingController.top3Text.text;
-        playerRankText.text = RankingController.playerRankText.text;
+        top1Name.text = RankingController.top1name.text;
+        top1Score.text = RankingController.top1score.text;
+        top2Name.text = RankingController.top2name.text;
+        top2Score.text = RankingController.top2score.text;
+        top3Name.text = RankingController.top3name.text;
+        top3Score.text = RankingController.top3score.text;
+        playerName.text = RankingController.playerName.text;
+        playerRank.text = RankingController.playerRank.text;
+        playerScore.text = RankingController.playerScore.text;
         scoreText.text = level.ToString();
         rankingPanel.SetActive(true);
         inGameUI.SetActive(false);

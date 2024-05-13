@@ -135,10 +135,16 @@ public class ItemSpawn : MonoBehaviour
     }
     public void SpawnEnemy(int level)                                                  
     {
+        //GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
+        //enemies.Add(enemySpawn);
+        //RankingController.enemiesRank.Add(enemySpawn);  
+        //EnemyCollide enemyCollide = enemy.transform.GetChild(0).GetComponent<EnemyCollide>();
+        //enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
+        //enemyCollide.level = level;
         GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
         enemies.Add(enemySpawn);
-        RankingController.enemiesRank.Add(enemySpawn);  
-        EnemyCollide enemyCollide = enemy.transform.GetChild(0).GetComponent<EnemyCollide>();
+        RankingController.enemiesRank.Add(enemySpawn);
+        EnemyCollide enemyCollide = enemySpawn.transform.GetChild(0).GetComponent<EnemyCollide>();
         enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
         enemyCollide.level = level;
     }

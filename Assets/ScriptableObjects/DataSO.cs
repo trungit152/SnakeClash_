@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="DataSO", menuName = "ScriptableObjects/DataSO")] 
+[CreateAssetMenu(fileName = "DataSO", menuName = "ScriptableObjects/DataSO")]
 
 public class DataSO : ScriptableObject
 {
@@ -13,7 +13,9 @@ public class DataSO : ScriptableObject
     public int increseLevelCost = 500;
     public int increseItemCost = 500;
     public int currentLevel = 1;
-
+    public int skinIndex = 0;
+    public List<List<Sprite>> skins = new List<List<Sprite>>();
+    public List<DataSprite> skins2 = new List<DataSprite>();
     public List<string> names = new List<string>
         {
             "John", "Mary", "Luis", "Sophia", "Ahmed", "Anna", "Santiago", "Elena", "Hiroshi", "Yuki",
@@ -40,4 +42,9 @@ public class DataSO : ScriptableObject
             "Salvador", "Trinity", "Tomás José", "Summer", "Faker", "Gumayusi", "Messi", "Ricon", "Richa", "Yasuo", "Zeros",
             "Pepe"
         };
+}
+[System.Serializable]
+public class DataSprite
+{
+    public List<Sprite> dataSprite = new List<Sprite>();
 }
