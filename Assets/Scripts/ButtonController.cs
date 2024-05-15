@@ -132,4 +132,12 @@ public class ButtonController : MonoBehaviour
     {
         SceneManager.LoadScene("HomeScene");
     }
+    public void IncreseRadius()
+    {
+        HeadController.Magnite();
+    }
+    public void Grow()
+    {
+        HeadController.GrowSnake();
+    }
 }

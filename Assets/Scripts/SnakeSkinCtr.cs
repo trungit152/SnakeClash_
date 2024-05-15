@@ -21,10 +21,10 @@ public class SnakeSkinCtr : MonoBehaviour
                 string path = "Assets/Gameplay/skins/skin " + (i + 1).ToString() + ".png";
                 if (File.Exists(path))
                 {
-                    List<Sprite> skin = new List<Sprite>();
+                    DataSprite skin = new DataSprite();
                     data.skins.Add(skin);
                     Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-                    data.skins[i].Add(sprite);
+                    data.skins[i].dataSprite.Add(sprite);
                 }
             }
             //add than skin
@@ -34,7 +34,7 @@ public class SnakeSkinCtr : MonoBehaviour
                 if (File.Exists(path))
                 {
                     Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-                    data.skins[i].Add(sprite);
+                    data.skins[i].dataSprite.Add(sprite);
                 }
                 else for (int j = 0; j < 10; j++)
                     {
@@ -42,7 +42,7 @@ public class SnakeSkinCtr : MonoBehaviour
                         if (File.Exists(path2))
                         {
                             Sprite sprite2 = AssetDatabase.LoadAssetAtPath<Sprite>(path2);
-                            data.skins[i].Add(sprite2);
+                            data.skins[i].dataSprite.Add(sprite2);
                         }
                         else break;
                     }
@@ -54,7 +54,7 @@ public class SnakeSkinCtr : MonoBehaviour
                 if (File.Exists(path))
                 {
                     Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-                    data.skins[i].Add(sprite);
+                    data.skins[i].dataSprite.Add(sprite);
                 }
             }
         }
@@ -69,22 +69,22 @@ public class SnakeSkinCtr : MonoBehaviour
         }
         for (int i = 0; i < 6;)
         {
-            int bodyPath = data.skins[data.skinIndex].Count - 2;
+            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
             for (int j = 1; j <= bodyPath; j++)
             {
                 if (i < 6)
                 {
                     Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex][j];
+                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
                     i++;
                 }
             }
         }
         Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex][0];
+        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
 
         Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex][data.skins[data.skinIndex].Count - 1];
+        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
     }
 
     public void LoadNextSkin()
@@ -95,23 +95,23 @@ public class SnakeSkinCtr : MonoBehaviour
         }
         for (int i = 0; i < 6;)
         {
-            int bodyPath = data.skins[data.skinIndex].Count - 2;
+            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
 
             for (int j = 1; j <= bodyPath; j++)
             {
                 if(i < 6)
                 {
                     Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex][j];
+                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
                     i++;
                 }
             }
         }
         Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex][0];
+        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
 
         Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex][data.skins[data.skinIndex].Count - 1];
+        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
     }
 
     public void LoadPreviousSkin()
@@ -122,23 +122,23 @@ public class SnakeSkinCtr : MonoBehaviour
         }
         for (int i = 0; i < 6;)
         {
-            int bodyPath = data.skins[data.skinIndex].Count - 2;
+            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
 
             for (int j = 1; j <= bodyPath; j++)
             {
                 if (i < 6)
                 {
                     Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex][j];
+                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
                     i++;
                 }
             }
         }
         Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex][0];
+        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
 
         Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex][data.skins[data.skinIndex].Count - 1];
+        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
     }
 
 }

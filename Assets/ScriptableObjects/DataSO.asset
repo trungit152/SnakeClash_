@@ -10,17 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e48fd8d1c42782b4aa4941e8d36c8b27, type: 3}
-  m_Name: 
+  m_Name: DataSO
   m_EditorClassIdentifier: 
   startLevel: 5
   startSpeed: 8
   itemTime: 2.5
-  coin: 9999999
+  coin: 58200
   increseSpeedCost: 500
   increseLevelCost: 500
   increseItemCost: 500
   currentLevel: 1
-  skinIndex: 2
+  skinIndex: 0
+  skins:
+  - dataSprite:
+    - {fileID: 21300000, guid: e3ff64f98f371b4428eb4bff020a1449, type: 3}
+    - {fileID: 21300000, guid: edf6bd01907ddd44cbdbf4435334da26, type: 3}
+    - {fileID: 21300000, guid: a35c10e1a9ecc414da15426e8506b0b3, type: 3}
+  - dataSprite:
+    - {fileID: 21300000, guid: cc8822c72903c0b4891fdb826c1a4ee7, type: 3}
+    - {fileID: 21300000, guid: 79c7088541a481f469542a03ae488310, type: 3}
+    - {fileID: 21300000, guid: f1decdea0c046e24d9c9296b17894622, type: 3}
+  - dataSprite:
+    - {fileID: 21300000, guid: 2d1d8d1dd01b9f94996b07332d28b055, type: 3}
+    - {fileID: 21300000, guid: 88c9b63e828234747a5e2946648f63eb, type: 3}
+    - {fileID: 21300000, guid: d3dcd1daec7417341bcdae72aa3f7197, type: 3}
+    - {fileID: 21300000, guid: ee0b8d7e7b4d7e64880104c3dd5813a7, type: 3}
+  - dataSprite:
+    - {fileID: 21300000, guid: ca97e9421b1f17c49b619a72e315ca2e, type: 3}
+    - {fileID: 21300000, guid: f9d8a9e0a1b406c46a0ff1b2c8d348f8, type: 3}
+    - {fileID: 21300000, guid: 5e16af5b01ded9043861c66d62aeb4bf, type: 3}
+    - {fileID: 21300000, guid: 4f8cd05d0de39a640a93638f7421c832, type: 3}
+  - dataSprite:
+    - {fileID: 21300000, guid: 14c46973cbe3a3e4c9c732359483901a, type: 3}
+    - {fileID: 21300000, guid: 320438a65ba42b74795e6bb21196b6d0, type: 3}
+    - {fileID: 21300000, guid: e29de3a5e83d78a44a19ae1086085eb8, type: 3}
+    - {fileID: 21300000, guid: 42eb9dfed18261444b8a610d158173b7, type: 3}
   names:
   - John
   - Mary

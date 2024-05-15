@@ -602,7 +602,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     1: NODECANVAS;DOTWEEN
     4: DOTWEEN;NODECANVAS
-    7: DOTWEEN
+    7: DOTWEEN;NODECANVAS
     13: DOTWEEN
     14: DOTWEEN
     19: DOTWEEN

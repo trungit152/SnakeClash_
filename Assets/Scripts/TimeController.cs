@@ -26,6 +26,7 @@ public class TimeController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject rankingPanel;
+    [SerializeField] private GameObject arrow;
 
     private float time;
     private string minute, second;
@@ -109,6 +110,7 @@ public class TimeController : MonoBehaviour
             scoreText.text = HeadController.level.ToString();
             RankingController.TurnOffText();
             HeadController.TurnOffLevelText();
+            arrow.SetActive(false);
             data.coin += HeadController.level;
             Time.timeScale = 0f;
             if(HeadController.level < targetLevel)

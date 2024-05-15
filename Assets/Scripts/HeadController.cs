@@ -36,6 +36,8 @@ public class HeadController : MonoBehaviour
     public static HeadController instance;
     public List<Vector3> bodyFoods;
 
+    private int skinCounter = 0;
+    private int skinPath_;
     private Sprite headSkin;
     private List<GameObject> bodyParts;
     private List<Vector3> positionHistory;
@@ -129,6 +131,23 @@ public class HeadController : MonoBehaviour
         {
             bodyParts.Insert(0, startBody.transform.GetChild(i).gameObject);
         }
+        int skinPath = data.skins[data.skinIndex].dataSprite.Count - 2;
+        skinPath_ = skinPath;
+        //gan skin cho ran
+        SpriteRenderer headSkin = GameObject.Find("2DHead").GetComponent<SpriteRenderer>();
+        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
+        SpriteRenderer tailSkin = GameObject.Find("2DTail").GetComponent<SpriteRenderer>();
+        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
+        for (int i = 0; i < bodyParts.Count-1; i++)
+        {
+            bodyParts[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_,skinCounter)];
+            skinCounter++;
+        }
+                
+    }
+    private int IndexCounter(int nums, int i)
+    {
+        return (i % nums) + 1;
     }
     public void SetStat()
     {
@@ -188,11 +207,12 @@ public class HeadController : MonoBehaviour
             }
         }
     }
-    private void GrowSnake()
+    public void GrowSnake()
     {
         if(bodyParts.Count < 60) 
         {
             GameObject body = Instantiate(bodyPrefabs);
+            body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (bodyParts.Count() != 0)
             {
                 body.transform.localScale = bodyParts[bodyParts.Count-1].transform.localScale;
@@ -220,8 +240,7 @@ public class HeadController : MonoBehaviour
     {
         if (other.CompareTag("Food"))
         {
-            levelf += 0.5f;
-            level = (int)levelf;
+            level++;
             if (level == 50 || level == 200 || level == 450 || level == 600)
             {
                 CameraController.CameraUp();
@@ -276,10 +295,11 @@ public class HeadController : MonoBehaviour
         MovementController.SpeedDown(speedUpAdd);
         isSpeedUp = false;
     }
-    private void Magnite()
+    public void Magnite()
     {
         if (!isMagnite)
         {
+            isMagnite = true;
             CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
             hitBoxCol.radius *= 2;
             StartCoroutine(Wait2s());
@@ -290,6 +310,7 @@ public class HeadController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
         hitBoxCol.radius /= 2;
+        isMagnite = false;
     }
     private void OnCollisionEnter(Collision collision)
     {
