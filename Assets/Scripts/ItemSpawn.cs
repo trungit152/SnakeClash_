@@ -41,7 +41,7 @@ public class ItemSpawn : MonoBehaviour
     {
         get
         {
-            if(rankingController == null)
+            if (rankingController == null)
             {
                 rankingController = GameObject.Find("RankingController").gameObject.GetComponent<RankingController>();
             }
@@ -93,7 +93,7 @@ public class ItemSpawn : MonoBehaviour
             GameObject enemyi = enemies[i].transform.GetChild(0).gameObject;
             Debug.Log("lan thu " + i);
             EnemyCollide enemy = enemyi.GetComponent<EnemyCollide>();
-            if(enemyi!= currentKing && enemy.level > kingLevel)
+            if (enemyi != currentKing && enemy.level > kingLevel)
             {
                 SetKing2(enemyi);
             }
@@ -102,7 +102,7 @@ public class ItemSpawn : MonoBehaviour
     private void Update()
     {
         cd -= Time.deltaTime;
-        if(cd < 0)
+        if (cd < 0)
         {
             cd = 10f;
             Spawn();
@@ -124,7 +124,7 @@ public class ItemSpawn : MonoBehaviour
     private void Spawn()
     {
         int i = Random.Range(1, 2);
-        if(i == 1)
+        if (i == 1)
         {
             GameObject.Instantiate(speedUp, RandomSpawnPos(), Quaternion.identity);
         }
@@ -133,7 +133,7 @@ public class ItemSpawn : MonoBehaviour
             GameObject.Instantiate(magnite, RandomSpawnPos(), Quaternion.identity);
         }
     }
-    public void SpawnEnemy(int level)                                                  
+    public void SpawnEnemy(int level)
     {
         //GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
         //enemies.Add(enemySpawn);

@@ -27,6 +27,7 @@ public class TimeController : MonoBehaviour
     [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject rankingPanel;
     [SerializeField] private GameObject arrow;
+    [SerializeField] private GameObject inGameRanking;
 
     private float time;
     private string minute, second;

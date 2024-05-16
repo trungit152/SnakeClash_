@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +30,6 @@ public class MinimapController : MonoBehaviour
     }
     public void MiniCameraUp()
     {
-        miniCamera.orthographicSize += 5f;
+        miniCamera.orthographicSize += 3f;
     }
 }

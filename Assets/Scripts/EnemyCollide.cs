@@ -70,8 +70,8 @@ public class EnemyCollide : MonoBehaviour
         }
     }
 
-    private int gap = 10;
-    private float gapf = 10f;
+    private int gap = 6;
+    private float gapf = 6f;
     public int level;
     private void Awake()
     {
@@ -96,10 +96,6 @@ public class EnemyCollide : MonoBehaviour
         }
     }
     private void Update()
-    {
-
-    }
-    private void FixedUpdate()
     {
         MoveBody();
     }

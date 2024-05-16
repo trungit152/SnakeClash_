@@ -1,6 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#if UNITY_EDITOR
 using UnityEditor;
+#endif
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -11,13 +13,14 @@ public class SnakeSkinCtr : MonoBehaviour
     public GameObject head;
     public GameObject tail;
     public DataSO data;
+
     private void Awake()
     {
-        if(data.skins.Count == 0) 
+        if (data.skins.Count == 0)
         {
+#if UNITY_EDITOR
             for (int i = 0; i < 5; i++)
             {
-
                 string path = "Assets/Gameplay/skins/skin " + (i + 1).ToString() + ".png";
                 if (File.Exists(path))
                 {
@@ -27,7 +30,8 @@ public class SnakeSkinCtr : MonoBehaviour
                     data.skins[i].dataSprite.Add(sprite);
                 }
             }
-            //add than skin
+
+            // Add body skin
             for (int i = 0; i < 5; i++)
             {
                 string path = "Assets/Gameplay/skins/than " + (i + 1).ToString() + ".png";
@@ -36,7 +40,9 @@ public class SnakeSkinCtr : MonoBehaviour
                     Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
                     data.skins[i].dataSprite.Add(sprite);
                 }
-                else for (int j = 0; j < 10; j++)
+                else
+                {
+                    for (int j = 0; j < 10; j++)
                     {
                         string path2 = "Assets/Gameplay/skins/than " + (i + 1).ToString() + "." + (j + 1).ToString() + ".png";
                         if (File.Exists(path2))
@@ -46,8 +52,10 @@ public class SnakeSkinCtr : MonoBehaviour
                         }
                         else break;
                     }
+                }
             }
-            //add duoi skin
+
+            // Add tail skin
             for (int i = 0; i < 5; i++)
             {
                 string path = "Assets/Gameplay/skins/duoi " + (i + 1).ToString() + ".png";
@@ -57,88 +65,73 @@ public class SnakeSkinCtr : MonoBehaviour
                     data.skins[i].dataSprite.Add(sprite);
                 }
             }
+#endif
         }
-
     }
+
     void Start()
+    {
+        InitializeBodies();
+
+        if (data.skins.Count > 0)
+        {
+            UpdateSkins();
+        }
+    }
+
+    private void InitializeBodies()
     {
         for (int i = 0; i < 6; i++)
         {
             GameObject body = GameObject.Find("body" + i.ToString());
-            bodies.Add(body);
-        }
-        for (int i = 0; i < 6;)
-        {
-            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
-            for (int j = 1; j <= bodyPath; j++)
+            if (body != null)
             {
-                if (i < 6)
-                {
-                    Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
-                    i++;
-                }
+                bodies.Add(body);
             }
         }
-        Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
+    }
 
-        Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
+    private void UpdateSkins()
+    {
+        if (data.skins.Count > 0 && data.skinIndex < data.skins.Count)
+        {
+            for (int i = 0; i < 6;)
+            {
+                int bodyPath = Mathf.Min(data.skins[data.skinIndex].dataSprite.Count - 2, 6);
+                for (int j = 1; j <= bodyPath; j++)
+                {
+                    if (i < bodies.Count)
+                    {
+                        Image skin = bodies[i].GetComponent<Image>();
+                        skin.sprite = data.skins[data.skinIndex].dataSprite[j];
+                        i++;
+                    }
+                }
+            }
+
+            Image headSkin = head.GetComponent<Image>();
+            headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
+
+            Image tailSkin = tail.GetComponent<Image>();
+            tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
+        }
     }
 
     public void LoadNextSkin()
     {
-        if (data.skinIndex < 4)
+        if (data.skinIndex < data.skins.Count - 1)
         {
-            data.skinIndex += 1;
+            data.skinIndex++;
         }
-        for (int i = 0; i < 6;)
-        {
-            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
-
-            for (int j = 1; j <= bodyPath; j++)
-            {
-                if(i < 6)
-                {
-                    Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
-                    i++;
-                }
-            }
-        }
-        Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
-
-        Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
+        UpdateSkins();
     }
 
     public void LoadPreviousSkin()
     {
         if (data.skinIndex > 0)
         {
-            data.skinIndex -= 1;
+            data.skinIndex--;
         }
-        for (int i = 0; i < 6;)
-        {
-            int bodyPath = data.skins[data.skinIndex].dataSprite.Count - 2;
-
-            for (int j = 1; j <= bodyPath; j++)
-            {
-                if (i < 6)
-                {
-                    Image skin = bodies[i].GetComponent<Image>();
-                    skin.sprite = data.skins[data.skinIndex].dataSprite[j];
-                    i++;
-                }
-            }
-        }
-        Image headSkin = head.GetComponent<Image>();
-        headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
-
-        Image tailSkin = tail.GetComponent<Image>();
-        tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
+        UpdateSkins();
     }
-
 }

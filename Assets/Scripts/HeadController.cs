@@ -32,23 +32,19 @@ public class HeadController : MonoBehaviour
     [SerializeField] private GameObject rankingPanel;
     [SerializeField] private GameObject inGameRankingPanel;
     [SerializeField] private GameObject inGameUI;
+    [SerializeField] private GameObject arrow;
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
 
     private int skinCounter = 0;
     private int skinPath_;
-    private Sprite headSkin;
-    private List<GameObject> bodyParts;
-    private List<Vector3> positionHistory;
-    private int gap = 5;
-    private float gapf = 5f;
+    private float gapf = 8f;
     private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
     private bool isMagnite;
     public int level = 5;
-    private float levelf = 5;
     private MovementController movementController;
     private MovementController MovementController
     {
@@ -118,18 +114,15 @@ public class HeadController : MonoBehaviour
         isSpeedUp = false;
         isMagnite = false;
         instance = this;
-        Time.fixedDeltaTime = 0.008f;
     }
     private void Start()
     {
         inGameRankingPanel.SetActive(false);
         level = data.startLevel;
         Debug.Log("Head " + level);
-        bodyParts = new List<GameObject>();
-        positionHistory = new List<Vector3>();
         for (int i = 0; i < startBody.transform.childCount; i++)
         {
-            bodyParts.Insert(0, startBody.transform.GetChild(i).gameObject);
+            MovementController.AddToBodyParts(startBody.transform.GetChild(i).gameObject);
         }
         int skinPath = data.skins[data.skinIndex].dataSprite.Count - 2;
         skinPath_ = skinPath;
@@ -138,12 +131,12 @@ public class HeadController : MonoBehaviour
         headSkin.sprite = data.skins[data.skinIndex].dataSprite[0];
         SpriteRenderer tailSkin = GameObject.Find("2DTail").GetComponent<SpriteRenderer>();
         tailSkin.sprite = data.skins[data.skinIndex].dataSprite[data.skins[data.skinIndex].dataSprite.Count - 1];
-        for (int i = 0; i < bodyParts.Count-1; i++)
+        for (int i = 0; i < MovementController.bodyParts.Count - 1; i++)
         {
-            bodyParts[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_,skinCounter)];
+            MovementController.bodyParts[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter)];
             skinCounter++;
         }
-                
+
     }
     private int IndexCounter(int nums, int i)
     {
@@ -162,7 +155,7 @@ public class HeadController : MonoBehaviour
             GrowSnake();
             SizeGrow();
         }
-        if(level >= 50 && level < 200)
+        if (level >= 50 && level < 200)
         {
             CameraController.CameraUp();
         }
@@ -180,78 +173,55 @@ public class HeadController : MonoBehaviour
     }
     private void Update()
     {
-
-    }
-    private void FixedUpdate()
-    {
-        MoveBody();
-    }
-
-    private void MoveBody()
-    {
-        positionHistory.Insert(0, firstBody.transform.position);
-        if (positionHistory.Count > 1000)
-        {
-            positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
-        }
-        int i = 0;
-        foreach (var body in bodyParts)
-        {
-            if (body != null)
-            {
-                Vector3 point = positionHistory[Mathf.Clamp(i * gap, 0, positionHistory.Count() - 1)];
-                Vector3 moveDirection = point - body.transform.position;
-                body.transform.LookAt(point);
-                body.transform.Translate(moveDirection.normalized * Time.deltaTime * moveSpeed, Space.World);
-                i++;
-            }
-        }
     }
     public void GrowSnake()
     {
-        if(bodyParts.Count < 60) 
+        if (MovementController.bodyParts.Count < 60)
         {
             GameObject body = Instantiate(bodyPrefabs);
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter++)];
-            if (bodyParts.Count() != 0)
+            if (MovementController.bodyParts.Count() != 0)
             {
-                body.transform.localScale = bodyParts[bodyParts.Count-1].transform.localScale;
+                body.transform.localScale = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.localScale;
                 body.transform.position = firstBody.transform.position;
-                bodyParts.Insert(0, body);
+                MovementController.bodyParts.Insert(0, body);
             }
             else
             {
                 body.transform.position = firstBody.transform.position;
-                bodyParts.Insert(0, body);
+                MovementController.bodyParts.Insert(0, body);
             }
             body.transform.SetParent(fullBody.transform);
             gapf += 0.05f;
-            gap = (int)gapf;
+            MovementController.gap = (int)gapf;
         }
         if (moveSpeed < 22f)
         {
             moveSpeed += 0.035f;
-            MovementController.IncreseSpeed();
+            MovementController.IncreaseSpeed();
         }
-        Time.fixedDeltaTime = 0.008f + (float)bodyParts.Count() * 0.01f / 120f;
+    }
+    public void LevelUp()
+    {
+        level++;
+        if (level == 15 || level == 50 || level == 450 || level == 600)
+        {
+            MovementController.CameraUp();
+            MinimapController.MiniCameraUp();
+        }
+        levelText.text = "Level " + level.ToString();
+        if (level % 5 == 0)
+        {
+            GrowSnake();
+            SizeGrow();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Food"))
         {
-            level++;
-            if (level == 50 || level == 200 || level == 450 || level == 600)
-            {
-                CameraController.CameraUp();
-                MinimapController.MiniCameraUp();
-            }
-            levelText.text = "Level " + level.ToString();
-            if (level % 5 == 0)
-            {
-                GrowSnake();
-                SizeGrow();
-            }
+            LevelUp();
         }
         if (other.CompareTag("Body"))
         {
@@ -276,20 +246,20 @@ public class HeadController : MonoBehaviour
     }
     private void SpeedUp()
     {
-        if(!isSpeedUp)
+        if (!isSpeedUp)
         {
             moveSpeed += speedUpAdd;
             MovementController.SpeedUp(speedUpAdd);
-            gap -= (int)speedUpAdd / 3;
+            MovementController.gap -= (int)speedUpAdd / 3;
             gapf -= speedUpAdd / 3;
             isSpeedUp = true;
             StartCoroutine(Wait3s());
         }
-    } 
+    }
     IEnumerator Wait3s()
     {
         yield return new WaitForSeconds(itemTime);
-        gap += (int)speedUpAdd / 3;
+        MovementController.gap += (int)speedUpAdd / 3;
         gapf += speedUpAdd / 3;
         moveSpeed -= speedUpAdd;
         MovementController.SpeedDown(speedUpAdd);
@@ -329,12 +299,12 @@ public class HeadController : MonoBehaviour
     }
     private void SizeGrow()
     {
-        if(level < 600)
+        if (level < 600)
         {
             transform.localScale += new Vector3(0.02f, 0.02f, 0.02f);
-            for (int i = 0; i < bodyParts.Count(); i++)
+            for (int i = 0; i < MovementController.bodyParts.Count(); i++)
             {
-                bodyParts[i].transform.localScale = transform.localScale;
+                MovementController.bodyParts[i].transform.localScale = transform.localScale;
             }
             transform.position = Vector3.MoveTowards(transform.position,
                 new Vector3(transform.position.x, transform.position.y + 0.01f, transform.position.z), 20f * Time.deltaTime);
@@ -344,23 +314,23 @@ public class HeadController : MonoBehaviour
     public void HeadBit()
     {
         bodyFoods = new List<Vector3>();
-        for (int i = 0;i < bodyParts.Count(); i++)
+        for (int i = 0; i < MovementController.bodyParts.Count(); i++)
         {
-            BodyController bdCtr = bodyParts[i].GetComponent<BodyController>();
+            BodyController bdCtr = MovementController.bodyParts[i].GetComponent<BodyController>();
             if (bdCtr.isBit)
             {
-                for (int j = bodyParts.Count - 1; j >= i; j--)
+                for (int j = MovementController.bodyParts.Count - 1; j >= i; j--)
                 {
                     for (int k = 0; k < 2; k++)
                     {
-                        GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[j]), Quaternion.identity);
-                        food.transform.localScale = RandomScale(bodyParts[j]);
+                        GameObject food = Instantiate(foodPrefabs, RandomPos(MovementController.bodyParts[j]), Quaternion.identity);
+                        food.transform.localScale = RandomScale(MovementController.bodyParts[j]);
                     }
-                    bodyFoods.Insert(0, bodyParts[j].transform.position);
-                    Destroy(bodyParts[j]);
-                    bodyParts.RemoveAt(j);
+                    bodyFoods.Insert(0, MovementController.bodyParts[j].transform.position);
+                    Destroy(MovementController.bodyParts[j]);
+                    MovementController.bodyParts.RemoveAt(j);
                 }
-                i = bodyParts.Count();
+                i = MovementController.bodyParts.Count();
             }
         }
     }
@@ -371,12 +341,13 @@ public class HeadController : MonoBehaviour
     }
     public void Die()
     {
-        for (int i = bodyParts.Count() - 1; i >= 0; i--)
+        for (int i = MovementController.bodyParts.Count() - 1; i >= 0; i--)
         {
-            Destroy(bodyParts[i]);
-            bodyParts.RemoveAt(i);
+            Destroy(MovementController.bodyParts[i]);
+            MovementController.bodyParts.RemoveAt(i);
         }
         data.coin += level;
+        Destroy(GameObject.Find("MovementController").gameObject);
         Destroy(gameObject);
         MinimapController.HideMinimap();
         top1Name.text = RankingController.top1name.text;
@@ -389,7 +360,9 @@ public class HeadController : MonoBehaviour
         playerRank.text = RankingController.playerRank.text;
         playerScore.text = RankingController.playerScore.text;
         scoreText.text = level.ToString();
+        arrow.SetActive(false);
         rankingPanel.SetActive(true);
+        Debug.Log("Show rank");
         inGameUI.SetActive(false);
         inGameRankingPanel.SetActive(false);
         RankingController.TurnOffText();

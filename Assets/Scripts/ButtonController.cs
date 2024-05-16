@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class ButtonController : MonoBehaviour
 {
@@ -138,6 +139,6 @@ public class ButtonController : MonoBehaviour
     }
     public void Grow()
     {
-        HeadController.GrowSnake();
+        HeadController.LevelUp();
     }
 }

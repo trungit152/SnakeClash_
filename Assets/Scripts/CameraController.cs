@@ -7,12 +7,11 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private DataSO data;
     public CinemachineVirtualCamera virtualCamera;
-    public Vector3 newFollowOffset;
-
-    private float changeDuration = 0.5f;
+    public Camera mainCamera;
+    public float camSize;
 
     private HeadController headController;
-    
+
     private HeadController HeadController
     {
         get
@@ -34,7 +33,7 @@ public class CameraController : MonoBehaviour
     {
         get
         {
-            if(minimapController == null)
+            if (minimapController == null)
             {
                 minimapController = GameObject.Find("MinimapCamera").GetComponent<MinimapController>();
             }
@@ -47,36 +46,22 @@ public class CameraController : MonoBehaviour
     }
     void Start()
     {
-        newFollowOffset = new Vector3(0, 30, 0);
+        camSize = mainCamera.orthographicSize; 
     }
-    void Update()
-    {
-
-    }
-
-    Coroutine test;
     public void CameraUp()
     {
-        newFollowOffset += new Vector3(0, 18, 0);
-        if (virtualCamera != null)
-        {
-            test = StartCoroutine(CameraUpSmooth(newFollowOffset));
-            MinimapController.MiniCameraUp();
-        }
+        StartCoroutine(ChangeValueOverTime(camSize, camSize+5f, 0.7f));        
     }
-    IEnumerator CameraUpSmooth(Vector3 targetFollowOffset)
+    public IEnumerator ChangeValueOverTime(float a, float b, float t)
     {
         float elapsedTime = 0f;
-        Vector3 initialFollowOffset = virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-
-        while (elapsedTime < changeDuration)
+        while (elapsedTime < t)
         {
-            Vector3 newFollowOffset = Vector3.Lerp(initialFollowOffset, targetFollowOffset, elapsedTime / changeDuration);
-            virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = newFollowOffset;
+            camSize = Mathf.Lerp(a, b, elapsedTime / t);
             elapsedTime += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime*2);
+            yield return new WaitForSeconds(Time.deltaTime * 2);
         }
-        virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = targetFollowOffset;
+        camSize = b;
+        mainCamera.orthographicSize = camSize;
     }
-
 }
