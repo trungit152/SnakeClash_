@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -63,7 +58,7 @@ public class NavigationScript : MonoBehaviour
     {
         targetAngle += 180f;
         rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
-        stunned = 1f;
+        stunned = 0.5f;
         foodTarget = null;
     }
     public void Busy()

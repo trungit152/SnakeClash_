@@ -23,6 +23,8 @@ public class EnemyCollide : MonoBehaviour
 
     public string enemyName;
 
+
+
     private NavigationScript nav;
     private NavigationScript Nav
     {
@@ -195,15 +197,9 @@ public class EnemyCollide : MonoBehaviour
         {
             SpeedUp();
         }
-        if (other.CompareTag("Magnite"))
+        if (other.gameObject.CompareTag("PlayerHead"))
         {
-        }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("PlayerHead"))
-        {
-            HeadController head = collision.gameObject.GetComponent<HeadController>();
+            HeadController head = other.gameObject.GetComponent<HeadController>();
             if (level > head.level)
             {
                 head.Die();
@@ -214,20 +210,24 @@ public class EnemyCollide : MonoBehaviour
                 Destroy(gameObject.transform.parent.gameObject);
             }
         }
-        if (collision.gameObject.CompareTag("Head") && (collision.gameObject.transform.parent != gameObject.transform.parent))
+        if (other.gameObject.CompareTag("Head") && (other.gameObject.transform.parent != gameObject.transform.parent))
         {
-            EnemyCollide enemyHead = collision.gameObject.GetComponent<EnemyCollide>();
+            EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
             if (level >= enemyHead.level)
             {
                 enemyHead.Die();
                 MoveAfterBite(enemyHead.bodyFoods);
-                Destroy(collision.gameObject.transform.parent.gameObject);
+                Destroy(other.gameObject.transform.parent.gameObject);
             }
         }
-        if (collision.gameObject.CompareTag("Wall"))
+        if (other.gameObject.CompareTag("Wall"))
         {
             Nav.Stun();
         }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+
     }
     private void MoveAfterBite(List<Vector3> foods)
     {

@@ -119,7 +119,6 @@ public class HeadController : MonoBehaviour
     {
         inGameRankingPanel.SetActive(false);
         level = data.startLevel;
-        Debug.Log("Head " + level);
         for (int i = 0; i < startBody.transform.childCount; i++)
         {
             MovementController.AddToBodyParts(startBody.transform.GetChild(i).gameObject);
@@ -204,7 +203,7 @@ public class HeadController : MonoBehaviour
     public void LevelUp()
     {
         level++;
-        if (level == 15 || level == 50 || level == 450 || level == 600)
+        if (level == 50 || level == 200 || level == 450 || level == 600)
         {
             MovementController.CameraUp();
             MinimapController.MiniCameraUp();
@@ -242,6 +241,19 @@ public class HeadController : MonoBehaviour
         if (other.CompareTag("Magnite"))
         {
             Magnite();
+        }
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            Debug.Log("va cham voi wall");
+            MovementController.instance.Collide();
+        }
+        if (other.gameObject.CompareTag("Head"))
+        {
+            EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
+            if (level >= enemyHead.level)
+            {
+                enemyHead.Die();
+            }
         }
     }
     private void SpeedUp()
@@ -286,6 +298,7 @@ public class HeadController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
+            Debug.Log("va cham voi wall");
             MovementController.instance.Collide();
         }
         if (collision.gameObject.CompareTag("Head"))
@@ -362,7 +375,6 @@ public class HeadController : MonoBehaviour
         scoreText.text = level.ToString();
         arrow.SetActive(false);
         rankingPanel.SetActive(true);
-        Debug.Log("Show rank");
         inGameUI.SetActive(false);
         inGameRankingPanel.SetActive(false);
         RankingController.TurnOffText();

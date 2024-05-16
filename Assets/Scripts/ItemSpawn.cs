@@ -8,6 +8,7 @@ public class ItemSpawn : MonoBehaviour
     [SerializeField] private GameObject enemy;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private DataSO data;
+    [SerializeField] private GameObject fullEnemy;
 
     public List<GameObject> enemies;
     public int kingLevel;
@@ -87,11 +88,9 @@ public class ItemSpawn : MonoBehaviour
     public void KingDie(GameObject currentKing)
     {
         kingLevel = 0;
-        Debug.Log("lan thu -1");
         for (int i = 0; i < enemies.Count; i++)
         {
             GameObject enemyi = enemies[i].transform.GetChild(0).gameObject;
-            Debug.Log("lan thu " + i);
             EnemyCollide enemy = enemyi.GetComponent<EnemyCollide>();
             if (enemyi != currentKing && enemy.level > kingLevel)
             {
@@ -116,9 +115,7 @@ public class ItemSpawn : MonoBehaviour
         while (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1 && viewportPoint.z > 0)
         {
             pos = new Vector3(Random.Range(minX, maxX), 1.08f, Random.Range(minZ, maxZ));
-            viewportPoint = mainCamera.WorldToViewportPoint(pos);
-            Debug.Log("Da tao lai vi tri khac");
-        }
+            viewportPoint = mainCamera.WorldToViewportPoint(pos);        }
         return pos;
     }
     private void Spawn()
@@ -143,10 +140,12 @@ public class ItemSpawn : MonoBehaviour
         //enemyCollide.level = level;
         GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
         enemies.Add(enemySpawn);
+        enemySpawn.transform.SetParent(fullEnemy.transform);
         RankingController.enemiesRank.Add(enemySpawn);
         EnemyCollide enemyCollide = enemySpawn.transform.GetChild(0).GetComponent<EnemyCollide>();
         enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
         enemyCollide.level = level;
+        
     }
 
 }
