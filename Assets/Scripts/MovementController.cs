@@ -19,12 +19,29 @@ public class MovementController : MonoBehaviour
     private float targetAngle;
     private List<Vector3> positionHistory;
     private Vector3 movementDirection;
-    public int gap = 8;
+    public int gap = 6;
     public List<GameObject> bodyParts;
     private bool isJoystick;
     private Rigidbody rb;
 
     public static MovementController instance;
+
+    private HeadController headController;
+    private HeadController HeadController
+    {
+        get
+        {
+            if (headController == null)
+            {
+                headController = gameObject.GetComponent<HeadController>();
+            }
+            return headController;
+        }
+        set
+        {
+            headController = value;
+        }
+    }
     private void Awake()
     {
         instance = this;
@@ -87,8 +104,8 @@ public class MovementController : MonoBehaviour
             if (body != null)
             {
                 Vector3 point = positionHistory[Mathf.Clamp(i * gap, 0, positionHistory.Count - 1)];
-                Vector3 moveDirection = point - body.transform.position;
-                body.transform.LookAt(point);
+                Vector3 moveDirection = FreezeYPos(point, body.transform.position.y) - body.transform.position;
+                body.transform.LookAt(FreezeYPos(point, body.transform.position.y));
                 body.transform.Translate(moveDirection.normalized * Time.deltaTime * movementSpeed, Space.World);
                 i++;
             }
@@ -138,5 +155,10 @@ public class MovementController : MonoBehaviour
     public void SpeedDown(float add)
     {
         movementSpeed -= add;
+    }
+    private Vector3 FreezeYPos(Vector3 pos, float y)
+    {
+        Vector3 newPos = new Vector3(pos.x, y, pos.z);
+        return newPos;
     }
 }

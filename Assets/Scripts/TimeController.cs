@@ -111,6 +111,7 @@ public class TimeController : MonoBehaviour
             scoreText.text = HeadController.level.ToString();
             RankingController.TurnOffText();
             HeadController.TurnOffLevelText();
+            inGameRanking.SetActive(false );
             arrow.SetActive(false);
             data.coin += HeadController.level;
             Time.timeScale = 0f;

@@ -11,7 +11,10 @@ public class ChooseSkinText : MonoBehaviour
     void Start()
     {
         coinText.text = data.coin.ToString();
-        costText.text = data.skins[data.skinIndex].cost.ToString();
+        if (!data.skins[data.skinIndex].isBought)
+        {
+            costText.text = data.skins[data.skinIndex].cost.ToString();
+        }
     }
 
     // Update is called once per frame

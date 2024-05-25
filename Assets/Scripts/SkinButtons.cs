@@ -7,7 +7,7 @@ public class SkinButtons : MonoBehaviour
     [SerializeField] private Button backToHomeBtn;
     [SerializeField] private Button nextBtn;
     [SerializeField] private Button prevBtn;
-
+    [SerializeField] private DataSO data;
     private SnakeSkinCtr snakeSkinCtr;
     private SnakeSkinCtr SnakeSkinCtr
     {
@@ -32,6 +32,7 @@ public class SkinButtons : MonoBehaviour
     }
     private void BackToHomeSceneClick()
     {
+        data.skinIndex = data.chooseIndex;
         SceneManager.LoadScene("HomeScene");
     }
 

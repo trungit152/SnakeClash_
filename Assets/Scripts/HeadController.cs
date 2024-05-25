@@ -36,10 +36,10 @@ public class HeadController : MonoBehaviour
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
-
+    public float yHeight = 0.005f;
     private int skinCounter = 0;
     private int skinPath_;
-    private float gapf = 8f;
+    private float gapf = 5f;
     private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
@@ -181,8 +181,9 @@ public class HeadController : MonoBehaviour
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (MovementController.bodyParts.Count() != 0)
             {
-                body.transform.localScale = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.localScale;
+                body.transform.localScale = MovementController.bodyParts[0].transform.localScale;
                 body.transform.position = firstBody.transform.position;
+                yHeight += 0.001f;
                 MovementController.bodyParts.Insert(0, body);
             }
             else
@@ -264,6 +265,7 @@ public class HeadController : MonoBehaviour
             MovementController.SpeedUp(speedUpAdd);
             MovementController.gap -= (int)speedUpAdd / 3;
             gapf -= speedUpAdd / 3;
+            MovementController.gap = (int)gapf;
             isSpeedUp = true;
             StartCoroutine(Wait3s());
         }
@@ -273,6 +275,7 @@ public class HeadController : MonoBehaviour
         yield return new WaitForSeconds(itemTime);
         MovementController.gap += (int)speedUpAdd / 3;
         gapf += speedUpAdd / 3;
+        MovementController.gap = (int)gapf;
         moveSpeed -= speedUpAdd;
         MovementController.SpeedDown(speedUpAdd);
         isSpeedUp = false;
@@ -392,5 +395,10 @@ public class HeadController : MonoBehaviour
         float rd = Random.Range(-400, 100) / 1000f;
         Vector3 scale = new Vector3(body.transform.localScale.x + rd, body.transform.localScale.y + rd, body.transform.localScale.z + rd);
         return scale;
+    }
+    private Vector3 FreezeYPos(Vector3 pos, float y)
+    {
+        Vector3 newPos = new Vector3(pos.x, y, pos.z);
+        return newPos;
     }
 }

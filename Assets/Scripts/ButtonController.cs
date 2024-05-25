@@ -103,7 +103,7 @@ public class ButtonController : MonoBehaviour
             data.increseSpeedCost += 1000;
             data.coin -= data.increseSpeedCost;
             increseSpeedText.text = "Cost: " + data.increseSpeedCost.ToString();
-            coinText.text = "Coin: " + data.coin.ToString();
+            coinText.text = data.coin.ToString();
         }
     }
     public void IncreseLevelClick()
@@ -114,7 +114,7 @@ public class ButtonController : MonoBehaviour
             data.startLevel += 1;
             data.coin -= data.increseLevelCost;
             increseLevelText.text = "Cost: " + data.increseLevelCost.ToString();
-            coinText.text = "Coin: " + data.coin.ToString();
+            coinText.text = data.coin.ToString();
         }
 
     }
@@ -126,7 +126,7 @@ public class ButtonController : MonoBehaviour
             data.itemTime += 0.1f;
             data.coin -= data.increseItemCost;
             increseItemText.text = "Cost: " + data.increseItemCost.ToString();
-            coinText.text = "Coin: " + data.coin.ToString();
+            coinText.text = data.coin.ToString();
         }
     }
     public void HomeButtonClick()

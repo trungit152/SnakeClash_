@@ -14,6 +14,22 @@ public class SnakeSkinCtr : MonoBehaviour
     public GameObject tail;
     public DataSO data;
 
+    private ChooseSkinCtr chooseSkinCtr;
+    private ChooseSkinCtr ChooseSkinCtr
+    {
+        get
+        {
+            if(chooseSkinCtr == null)
+            {
+                chooseSkinCtr = GameObject.Find("ChooseSkinBtnCtr").GetComponent<ChooseSkinCtr>();
+            }
+            return chooseSkinCtr;
+        }
+        set
+        {
+            chooseSkinCtr = value;
+        }
+    }
     private void Awake()
     {
         if (data.skins.Count == 0)
@@ -123,6 +139,7 @@ public class SnakeSkinCtr : MonoBehaviour
         {
             data.skinIndex++;
         }
+        ChooseSkinCtr.CheckSelect();
         UpdateSkins();
     }
 
@@ -132,6 +149,7 @@ public class SnakeSkinCtr : MonoBehaviour
         {
             data.skinIndex--;
         }
+        ChooseSkinCtr.CheckSelect();
         UpdateSkins();
     }
 }

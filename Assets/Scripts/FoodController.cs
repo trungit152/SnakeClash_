@@ -34,8 +34,8 @@ public class FoodController : MonoBehaviour
         }
         if (other.CompareTag("Head"))
         {
-            NavigationScript nav = other.GetComponent<NavigationScript>();
-            nav.RemoveTarget();
+            EnemyCollide enemy = other.GetComponent<EnemyCollide>();
+            enemy.RemoveTarget();
             SpawnFood.instance.foods.Remove(gameObject);
             Destroy(gameObject);
         }

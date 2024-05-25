@@ -14,6 +14,8 @@ public class EnemyCollide : MonoBehaviour
     [SerializeField] private GameObject fullFoods;
     [SerializeField] private TextMeshPro levelText;
     [SerializeField] private DataSO data;
+    [SerializeField] private GameObject firstBody;
+    [SerializeField] private GameObject headSkin;
 
     private List<Vector3> bodyFoods;
     private List<GameObject> bodyParts;
@@ -21,23 +23,20 @@ public class EnemyCollide : MonoBehaviour
     private float speedUpAdd = 7f;
     private float itemTime = 3f;
 
+    /*******************/
+    private int randSkin;
     public string enemyName;
-
-
-
-    private NavigationScript nav;
-    private NavigationScript Nav
-    {
-        get
-        {
-            if (nav == null)
-            {
-                nav = GetComponent<NavigationScript>();
-            }
-            return nav;
-        }
-        set { nav = value; }
-    }
+    private int skinPath_;
+    private int skinCounter = 0;
+    private Rigidbody rb;
+    private Vector3 movementDirection;
+    public float targetAngle;
+    public float movementSpeed;
+    private Vector3 res;
+    private float stunned;
+    GameObject foodTarget;
+    public bool isTarget;
+    /*******************/
     private ItemSpawn itemSpawn;
     private ItemSpawn ItemSpawn
     {
@@ -72,20 +71,38 @@ public class EnemyCollide : MonoBehaviour
         }
     }
 
-    private int gap = 6;
-    private float gapf = 6f;
+    private int gap = 5;
+    private float gapf = 5f;
     public int level;
     private void Awake()
     {
+        Vector3 currentPosition = transform.position;
+        currentPosition.y = 0.1f;
+        transform.position = currentPosition;
         kingState.SetActive(false);
     }
     private void Start()
     {
+        /****************/
+        rb = GetComponent<Rigidbody>();
+        stunned = 0;
+        movementDirection = new Vector3(0, 0, 1);
+        targetAngle = 0;
+        /****************/
+        randSkin = Random.Range(0, data.skins.Count);
+        int skinPath = data.skins[randSkin].dataSprite.Count - 2;
+        skinPath_ = skinPath;
         moveSpeed = 10f;
-        Nav.movementSpeed = 10f;
+        movementSpeed = 10f;
         name = enemyName;
         fullFoods = GameObject.Find("FullFoods");
         bodyParts = new List<GameObject>();
+        GameObject body = Instantiate(bodyPrefabs);
+        body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[data.skins[randSkin].dataSprite.Count - 1];
+        body.transform.position = firstBody.transform.position;
+        bodyParts.Insert(0, body);
+        body.transform.SetParent(fullBody.transform);
+
         positionHistory = new List<Vector3>();
         levelText.text = enemyName + ": " + level.ToString();
         for (int i = 0; i < 20 + level; i++)
@@ -96,10 +113,24 @@ public class EnemyCollide : MonoBehaviour
                 SizeGrow();
             }
         }
+
+        //gan skin cho ran
+        SpriteRenderer headSkinSprite = headSkin.GetComponent<SpriteRenderer>();
+        headSkinSprite.sprite = data.skins[randSkin].dataSprite[0];
+        for (int i = 0; i < bodyParts.Count - 1; i++)
+        {
+            bodyParts[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[IndexCounter(skinPath_, skinCounter)];
+            skinCounter++;
+        }
+    }
+    private int IndexCounter(int nums, int i)
+    {
+        return (i % nums) + 1;
     }
     private void Update()
     {
         MoveBody();
+        FindFood();
     }
 
     //ham di chuyen body
@@ -126,11 +157,12 @@ public class EnemyCollide : MonoBehaviour
         if (bodyParts.Count < 60)
         {
             GameObject body = Instantiate(bodyPrefabs);
+            body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (bodyParts.Count() != 0)
             {
-                body.transform.localScale = bodyParts[bodyParts.Count()-1].transform.localScale;
-                body.transform.position = bodyParts[bodyParts.Count()-1].transform.position;
-                bodyParts.Insert(bodyParts.Count() - 1, body);
+                body.transform.localScale = bodyParts[0].transform.localScale;
+                body.transform.position = firstBody.transform.position;
+                bodyParts.Insert(0, body);
             }
             else
             {
@@ -144,7 +176,7 @@ public class EnemyCollide : MonoBehaviour
         if (moveSpeed < 22f)
         {
             moveSpeed += 0.035f;
-            Nav.IncreseSpeed();
+            IncreseSpeed();
         }
     }
 
@@ -176,7 +208,7 @@ public class EnemyCollide : MonoBehaviour
             }
             else
             {
-                Nav.Stun();
+                Stun();
             }
         }
         if (other.CompareTag("Body") && (other.transform.parent.parent != gameObject.transform.parent))
@@ -190,7 +222,7 @@ public class EnemyCollide : MonoBehaviour
             }
             else
             {
-                Nav.Stun();
+                Stun();
             }
         }
         if (other.CompareTag("SpeedUp"))
@@ -222,7 +254,7 @@ public class EnemyCollide : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Wall"))
         {
-            Nav.Stun();
+            Stun();
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -235,8 +267,8 @@ public class EnemyCollide : MonoBehaviour
         {
             int i = foods.Count - 5;
             Vector3 res = foods[i] - gameObject.transform.position;
-            Nav.Busy();
-            Nav.SetAngle(Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg);
+            Busy();
+            SetAngle(Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg);
         }
     }
     private void SizeGrow()
@@ -279,7 +311,7 @@ public class EnemyCollide : MonoBehaviour
     private void SpeedUp()
     {
         moveSpeed += speedUpAdd;
-        Nav.SpeedUp(speedUpAdd);
+        SpeedUp(speedUpAdd);
         gap -= (int)speedUpAdd / 3;
         gapf -= speedUpAdd / 3;
         StartCoroutine(Wait());
@@ -290,7 +322,7 @@ public class EnemyCollide : MonoBehaviour
         gap += (int)speedUpAdd / 3;
         gapf += speedUpAdd / 3;
         moveSpeed -= speedUpAdd;
-        Nav.SpeedDown(speedUpAdd);
+        SpeedDown(speedUpAdd);
     }
     public void Die()
     {
@@ -334,5 +366,91 @@ public class EnemyCollide : MonoBehaviour
         float rd = Random.Range(500, 1000) / 1000f;
         Vector3 scale = new Vector3(body.transform.localScale.x + rd, body.transform.localScale.y + rd, body.transform.localScale.z + rd);
         return scale;
+    }
+
+    /*******************************/
+    private void FindFood()
+    {
+        if (stunned == 0)
+        {
+            if (foodTarget != null)
+            {
+                targetAngle = Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg;
+                if (Vector3.Distance(transform.position, foodTarget.transform.position) < 0.05f)
+                {
+                    foodTarget = null;
+                }
+            }
+            else
+            {
+                RandFood();
+            }
+        }
+        else
+        {
+            if (stunned > 0)
+            {
+                stunned -= Time.deltaTime;
+            }
+            else stunned = 0;
+        }
+        rb.transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 1f);
+
+    }
+    public void Stun()
+    {
+        targetAngle = Mathf.Atan2(rb.transform.position.x, rb.transform.position.z) * Mathf.Rad2Deg + 180f;
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
+        stunned = 0.5f;
+        foodTarget = null;
+    }
+    public void Busy()
+    {
+        stunned = Random.Range(1f, 5f);
+        foodTarget = null;
+    }
+    private void RandFood()
+    {
+        if (SpawnFood.instance.foods != null)
+        {
+            if (SpawnFood.instance.foods.Count > 0)
+            {
+                foreach (var food in SpawnFood.instance.foods)
+                {
+                    if (Vector3.Distance(food.transform.position, gameObject.transform.position) < 20f)
+                    {
+                        foodTarget = food;
+                    }
+                }
+                if (foodTarget == null)
+                {
+                    int rand_ = Random.Range(0, SpawnFood.instance.foods.Count);
+                    foodTarget = SpawnFood.instance.foods[rand_];
+                }
+                res = foodTarget.transform.position - transform.position;
+            }
+        }
+    }
+    public void RemoveTarget()
+    {
+        foodTarget = null;
+    }
+    public void IncreseSpeed()
+    {
+        movementSpeed += 0.035f;
+    }
+    public void SetAngle(float value)
+    {
+        targetAngle = value;
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 120f);
+    }
+    public void SpeedUp(float add)
+    {
+        movementSpeed += add;
+    }
+    public void SpeedDown(float add)
+    {
+        movementSpeed -= add;
     }
 }
