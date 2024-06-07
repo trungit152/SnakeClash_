@@ -48,9 +48,9 @@ public class CameraController : MonoBehaviour
     {
         camSize = mainCamera.orthographicSize; 
     }
-    public void CameraUp()
+    public void CameraUp(float delta)
     {
-        StartCoroutine(ChangeValueOverTime(camSize, camSize+5f, 0.7f));        
+        StartCoroutine(ChangeValueOverTime(camSize, camSize+ delta, 1f));        
     }
     public IEnumerator ChangeValueOverTime(float a, float b, float t)
     {
@@ -59,9 +59,10 @@ public class CameraController : MonoBehaviour
         {
             camSize = Mathf.Lerp(a, b, elapsedTime / t);
             elapsedTime += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime * 2);
+            yield return null;
         }
         camSize = b;
         mainCamera.orthographicSize = camSize;
+
     }
 }

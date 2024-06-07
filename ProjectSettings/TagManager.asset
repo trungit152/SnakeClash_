@@ -17,6 +17,7 @@ TagManager:
   - 0deg
   - PlayerHead
   - HitBox
+  - EnemyHead4Food
   layers:
   - Default
   - TransparentFX
@@ -32,8 +33,8 @@ TagManager:
   - HitBox
   - Plane
   - Light
-  - 
-  - 
+  - EnemyHead4Food
+  - Food
   - 
   - 
   - 

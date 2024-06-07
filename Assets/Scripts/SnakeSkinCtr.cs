@@ -45,6 +45,13 @@ public class SnakeSkinCtr : MonoBehaviour
                     Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
                     data.skins[i].dataSprite.Add(sprite);
                 }
+
+                string path2 = "Assets/Gameplay/skins/skin chet " + (i + 1).ToString() + ".png";
+                if (File.Exists(path2))
+                {
+                    Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path2);
+                    data.foodSprites.Add(sprite);
+                }
             }
 
             // Add body skin
@@ -139,6 +146,10 @@ public class SnakeSkinCtr : MonoBehaviour
         {
             data.skinIndex++;
         }
+        else
+        {
+            data.skinIndex = 0;
+        }
         ChooseSkinCtr.CheckSelect();
         UpdateSkins();
     }
@@ -148,6 +159,10 @@ public class SnakeSkinCtr : MonoBehaviour
         if (data.skinIndex > 0)
         {
             data.skinIndex--;
+        }
+        else
+        {
+            data.skinIndex = data.skins.Count - 1;
         }
         ChooseSkinCtr.CheckSelect();
         UpdateSkins();

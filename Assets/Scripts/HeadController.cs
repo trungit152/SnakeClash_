@@ -8,7 +8,6 @@ using TMPro;
 public class HeadController : MonoBehaviour
 {
     [SerializeField] private GameObject bodyPrefabs;
-    [SerializeField] private float moveSpeed;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private GameObject fullBody;
     [SerializeField] private GameObject startBody;
@@ -33,13 +32,17 @@ public class HeadController : MonoBehaviour
     [SerializeField] private GameObject inGameRankingPanel;
     [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject arrow;
+    [SerializeField] private CapsuleCollider hitBoxCol;
+    [SerializeField] private GameObject top4Frame;
+    [SerializeField] private GameObject miniMapGFX;
+
+    public static bool test = false;
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
-    public float yHeight = 0.005f;
     private int skinCounter = 0;
     private int skinPath_;
-    private float gapf = 5f;
+    private float gapf = 2f;
     private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
@@ -143,7 +146,6 @@ public class HeadController : MonoBehaviour
     }
     public void SetStat()
     {
-        moveSpeed = data.startSpeed;
         inGameRankingPanel.SetActive(true);
         MovementController.movementSpeed = data.startSpeed;
         level = data.startLevel;
@@ -156,18 +158,15 @@ public class HeadController : MonoBehaviour
         }
         if (level >= 50 && level < 200)
         {
-            CameraController.CameraUp();
+            MovementController.CameraUp(5f);
         }
         else if (level >= 200 && level < 450)
         {
-            CameraController.CameraUp();
-            CameraController.CameraUp();
+            MovementController.CameraUp(10f);
         }
         else if (level >= 450 && level < 600)
         {
-            CameraController.CameraUp();
-            CameraController.CameraUp();
-            CameraController.CameraUp();
+            MovementController.CameraUp(15f);
         }
     }
     private void Update()
@@ -175,16 +174,28 @@ public class HeadController : MonoBehaviour
     }
     public void GrowSnake()
     {
-        if (MovementController.bodyParts.Count < 60)
+        if (MovementController.bodyParts.Count < 100)
         {
             GameObject body = Instantiate(bodyPrefabs);
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (MovementController.bodyParts.Count() != 0)
             {
                 body.transform.localScale = MovementController.bodyParts[0].transform.localScale;
-                body.transform.position = firstBody.transform.position;
-                yHeight += 0.001f;
-                MovementController.bodyParts.Insert(0, body);
+                if (MovementController.bodyParts.Count > 1)
+                {
+                    //body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position;
+                    //Renderer renderer = body.GetComponent<Renderer>();
+                    //renderer.sortingOrder = layerOverride;
+                    body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 2].transform.position - new Vector3(0, 0.01f, 0);
+                }
+                else
+                {
+                    //body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position;
+                    //Renderer renderer = body.GetComponent<Renderer>();
+                    //renderer.sortingOrder = layerOverride;
+                    body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position - new Vector3(0, 0.01f, 0);
+                }
+                MovementController.bodyParts.Insert(MovementController.bodyParts.Count-1, body);
             }
             else
             {
@@ -192,21 +203,20 @@ public class HeadController : MonoBehaviour
                 MovementController.bodyParts.Insert(0, body);
             }
             body.transform.SetParent(fullBody.transform);
-            gapf += 0.05f;
+            gapf += 0.03f;
             MovementController.gap = (int)gapf;
         }
-        if (moveSpeed < 22f)
+        if (MovementController.movementSpeed < 16f)
         {
-            moveSpeed += 0.035f;
             MovementController.IncreaseSpeed();
         }
     }
     public void LevelUp()
     {
-        level++;
-        if (level == 50 || level == 200 || level == 450 || level == 600)
+        level += 1;
+        if (level == 50 || level == 200 || level == 400 || level == 500 || level == 600)
         {
-            MovementController.CameraUp();
+            MovementController.CameraUp(5f);
             MinimapController.MiniCameraUp();
         }
         levelText.text = "Level " + level.ToString();
@@ -219,49 +229,51 @@ public class HeadController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Food"))
-        {
-            LevelUp();
-        }
-        if (other.CompareTag("Body"))
-        {
-            EnemyBodyController bodyCtr = other.GetComponent<EnemyBodyController>();
-            if (level >= bodyCtr.GetLevel())
-            {
-                bodyCtr.Bit();
-            }
-            else
-            {
-                MovementController.Stun();
-            }
-        }
-        if (other.CompareTag("SpeedUp"))
-        {
-            SpeedUp();
-        }
-        if (other.CompareTag("Magnite"))
-        {
-            Magnite();
-        }
-        if (other.gameObject.CompareTag("Wall"))
-        {
-            Debug.Log("va cham voi wall");
-            MovementController.instance.Collide();
-        }
-        if (other.gameObject.CompareTag("Head"))
-        {
-            EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
-            if (level >= enemyHead.level)
-            {
-                enemyHead.Die();
-            }
-        }
+        //if (other.CompareTag("Food"))
+        //{
+        //    Debug.Log("An");
+        //    Debug.Log(gameObject.name);
+        //    LevelUp();
+        //    RankingController.EnemyCheat(level);
+        //}
+        //if (other.CompareTag("Body"))
+        //{
+        //    EnemyBodyController bodyCtr = other.GetComponent<EnemyBodyController>();
+        //    if (level >= bodyCtr.GetLevel())
+        //    {
+        //        bodyCtr.Bit();
+        //    }
+        //    else
+        //    {
+        //        MovementController.Stun();
+        //    }
+        //}
+        //if (other.CompareTag("SpeedUp"))
+        //{
+        //    SpeedUp();
+        //}
+        //if (other.CompareTag("Magnite"))
+        //{
+        //    Magnite();
+        //}
+        //if (other.gameObject.CompareTag("Wall"))
+        //{
+        //    Debug.Log("va cham voi wall");
+        //    MovementController.instance.Collide();
+        //}
+        //if (other.gameObject.CompareTag("Head"))
+        //{
+        //    EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
+        //    if (level >= enemyHead.level)
+        //    {
+        //        enemyHead.Die();
+        //    }
+        //}
     }
-    private void SpeedUp()
+    public void SpeedUp()
     {
         if (!isSpeedUp)
         {
-            moveSpeed += speedUpAdd;
             MovementController.SpeedUp(speedUpAdd);
             MovementController.gap -= (int)speedUpAdd / 3;
             gapf -= speedUpAdd / 3;
@@ -276,32 +288,44 @@ public class HeadController : MonoBehaviour
         MovementController.gap += (int)speedUpAdd / 3;
         gapf += speedUpAdd / 3;
         MovementController.gap = (int)gapf;
-        moveSpeed -= speedUpAdd;
         MovementController.SpeedDown(speedUpAdd);
         isSpeedUp = false;
+    }
+
+    public void ZoomOut()
+    {
+        MovementController.CameraUp(7f);
+        StartCoroutine(Wait5sCamera());
+    }
+    IEnumerator Wait5sCamera()
+    {
+        yield return new WaitForSeconds(5f);
+        MovementController.CameraUp(-7f);
+        Debug.Log("da tru");
     }
     public void Magnite()
     {
         if (!isMagnite)
         {
             isMagnite = true;
-            CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
-            hitBoxCol.radius *= 2;
-            StartCoroutine(Wait2s());
+            hitBoxCol.radius *= 4;
+            StartCoroutine(Wait5s());
         }
     }
-    IEnumerator Wait2s()
+    IEnumerator Wait5s()
     {
-        yield return new WaitForSeconds(1f);
-        CapsuleCollider hitBoxCol = GameObject.Find("HitBox").GetComponent<CapsuleCollider>();
-        hitBoxCol.radius /= 2;
+        yield return new WaitForSeconds(5f);
+        MagniteOff();
+    }
+    public void MagniteOff()
+    {
+        hitBoxCol.radius /= 4;
         isMagnite = false;
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("va cham voi wall");
             MovementController.instance.Collide();
         }
         if (collision.gameObject.CompareTag("Head"))
@@ -315,9 +339,10 @@ public class HeadController : MonoBehaviour
     }
     private void SizeGrow()
     {
-        if (level < 600)
+        if (level < 800)
         {
-            transform.localScale += new Vector3(0.02f, 0.02f, 0.02f);
+            transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
+            miniMapGFX.transform.localScale -= new Vector3(0.02f, 0.02f, 0.02f);
             for (int i = 0; i < MovementController.bodyParts.Count(); i++)
             {
                 MovementController.bodyParts[i].transform.localScale = transform.localScale;
@@ -357,6 +382,8 @@ public class HeadController : MonoBehaviour
     }
     public void Die()
     {
+        RankingController.Sort();
+        RankingController.UpdateText();
         for (int i = MovementController.bodyParts.Count() - 1; i >= 0; i--)
         {
             Destroy(MovementController.bodyParts[i]);
@@ -368,13 +395,30 @@ public class HeadController : MonoBehaviour
         MinimapController.HideMinimap();
         top1Name.text = RankingController.top1name.text;
         top1Score.text = RankingController.top1score.text;
+        top1Name.color = RankingController.top1name.color;
+        top1Score.color = RankingController.top1score.color;
+
         top2Name.text = RankingController.top2name.text;
         top2Score.text = RankingController.top2score.text;
+        top2Name.color = RankingController.top2name.color;
+        top2Score.color = RankingController.top2score.color;
+
         top3Name.text = RankingController.top3name.text;
         top3Score.text = RankingController.top3score.text;
+        top3Name.color = RankingController.top3name.color;
+        top3Score.color = RankingController.top3score.color;
+
         playerName.text = RankingController.playerName.text;
         playerRank.text = RankingController.playerRank.text;
         playerScore.text = RankingController.playerScore.text;
+        playerName.color = Color.blue;
+        playerScore.color = Color.blue;
+        playerRank.color = Color.blue;
+        if(playerName.text == null)
+        {
+            top4Frame.SetActive(false);
+        }
+
         scoreText.text = level.ToString();
         arrow.SetActive(false);
         rankingPanel.SetActive(true);

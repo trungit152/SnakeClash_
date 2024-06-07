@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using Unity.Jobs;
+using UnityEngine.Jobs;
 
 public class EnemyCollide : MonoBehaviour
 {
     [SerializeField] private GameObject bodyPrefabs;
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private GameObject fullBody;
-    [SerializeField] GameObject foodPrefabs;
+    [SerializeField] FoodController foodPrefabs;
     [SerializeField] GameObject kingState;
     [SerializeField] private GameObject fullFoods;
     [SerializeField] private TextMeshPro levelText;
     [SerializeField] private DataSO data;
     [SerializeField] private GameObject firstBody;
     [SerializeField] private GameObject headSkin;
+    [SerializeField] private Camera mainCamera;
 
     private List<Vector3> bodyFoods;
     private List<GameObject> bodyParts;
@@ -24,16 +27,19 @@ public class EnemyCollide : MonoBehaviour
     private float itemTime = 3f;
 
     /*******************/
+    private Vector3 cameraPos;
     private int randSkin;
+    private int randSkin_;
     public string enemyName;
     private int skinPath_;
     private int skinCounter = 0;
     private Rigidbody rb;
     private Vector3 movementDirection;
     public float targetAngle;
-    public float movementSpeed;
+    //public float movementSpeed;
     private Vector3 res;
     private float stunned;
+    private float isCollide = 0f;
     GameObject foodTarget;
     public bool isTarget;
     /*******************/
@@ -71,14 +77,11 @@ public class EnemyCollide : MonoBehaviour
         }
     }
 
-    private int gap = 5;
-    private float gapf = 5f;
+    private int gap = 2;
+    private float gapf = 2f;
     public int level;
     private void Awake()
     {
-        Vector3 currentPosition = transform.position;
-        currentPosition.y = 0.1f;
-        transform.position = currentPosition;
         kingState.SetActive(false);
     }
     private void Start()
@@ -92,14 +95,14 @@ public class EnemyCollide : MonoBehaviour
         randSkin = Random.Range(0, data.skins.Count);
         int skinPath = data.skins[randSkin].dataSprite.Count - 2;
         skinPath_ = skinPath;
-        moveSpeed = 10f;
-        movementSpeed = 10f;
+        moveSpeed = 8f;
+        //movementSpeed = 8f;
         name = enemyName;
         fullFoods = GameObject.Find("FullFoods");
         bodyParts = new List<GameObject>();
         GameObject body = Instantiate(bodyPrefabs);
         body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[data.skins[randSkin].dataSprite.Count - 1];
-        body.transform.position = firstBody.transform.position;
+        body.transform.position = firstBody.transform.position - new Vector3(0, firstBody.transform.position.y - 0.01f, 0);
         bodyParts.Insert(0, body);
         body.transform.SetParent(fullBody.transform);
 
@@ -129,76 +132,135 @@ public class EnemyCollide : MonoBehaviour
     }
     private void Update()
     {
-        MoveBody();
-        FindFood();
+        UpdateIsColide();
+    }
+    private void FixedUpdate()
+    {
+        if (CheckViewPos(gameObject.transform.position) || gameObject.transform.parent == RankingController.enemiesRank[0] 
+            || CheckViewPos(bodyParts[bodyParts.Count-2].transform.position) || CheckViewPos(bodyParts[bodyParts.Count/2].transform.position))
+        {
+            FindFood();
+            MoveBody();
+        }
     }
 
+    private void UpdateIsColide()
+    {
+        if (isCollide > 0)
+        {
+            isCollide -= Time.deltaTime;
+        }
+        else isCollide = 0;
+    }
+
+    private bool CheckViewPos(Vector3 pos, float buffer = 1f)
+    {
+        Vector3 viewportPoint = ItemSpawn.mainCamera.WorldToViewportPoint(pos);
+        if (viewportPoint.x > -buffer && viewportPoint.x < 1 + buffer && viewportPoint.y > -buffer && viewportPoint.y < 1 + buffer && viewportPoint.z > 0)
+        {
+            return true;
+        }
+        return false;
+    }
     //ham di chuyen body
     private void MoveBody()
     {
         positionHistory.Insert(0, transform.position);
-        if (positionHistory.Count > 1000)
+        if (positionHistory.Count > bodyParts.Count * 6 + 20)
         {
             positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
         }
         int i = 0;
-        foreach (var body in bodyParts)
+        for (i = 0; i < bodyParts.Count; i++)
         {
+            var body = bodyParts[i];
             Vector3 point = positionHistory[Mathf.Clamp(i * gap, 0, positionHistory.Count() - 1)];
-            Vector3 moveDirection = point - body.transform.position;
-            body.transform.LookAt(point);
-            body.transform.Translate(moveDirection.normalized * Time.deltaTime * moveSpeed, Space.World);
-            i++;
+            Vector3 moveDirection = FreezeYPos(point, body.transform.position.y) - body.transform.position;
+            body.transform.LookAt(FreezeYPos(point, body.transform.position.y));
+            body.transform.Translate(moveDirection.normalized * Time.fixedDeltaTime * moveSpeed, Space.World);
         }
+    }
+    private Vector3 FreezeYPos(Vector3 pos, float y)
+    {
+        Vector3 newPos = new Vector3(pos.x, y, pos.z);
+        return newPos;
     }
     private void GrowSnake()
     {
         //Gioi han so body
-        if (bodyParts.Count < 60)
+        if (bodyParts.Count < 80)
         {
             GameObject body = Instantiate(bodyPrefabs);
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[IndexCounter(skinPath_, skinCounter++)];
-            if (bodyParts.Count() != 0)
+            if (bodyParts.Count() > 1)
             {
                 body.transform.localScale = bodyParts[0].transform.localScale;
-                body.transform.position = firstBody.transform.position;
+                body.transform.position = bodyParts[0].transform.position + new Vector3(0, 0.01f, 0);
                 bodyParts.Insert(0, body);
             }
             else
             {
-                body.transform.position = this.transform.position;
+                body.transform.localScale = transform.localScale;
+                body.transform.position = transform.position - new Vector3(0, transform.position.y, 0);
                 bodyParts.Insert(0, body);
             }
             body.transform.SetParent(fullBody.transform);
-            gapf += 0.05f;
+            gapf += 0.03f;
             gap = (int)gapf;
-        }
-        if (moveSpeed < 22f)
-        {
-            moveSpeed += 0.035f;
-            IncreseSpeed();
         }
     }
 
+    public void Eat()
+    {
+        level += 1;
+        if (level > ItemSpawn.kingLevel)
+        {
+            ItemSpawn.kingLevel = level;
+            ItemSpawn.SetKing2(gameObject);
+        }
+        levelText.text = enemyName + ": " + level.ToString();
+        if (level % 5 == 0)
+        {
+            GrowSnake();
+            SizeGrow();
+        }
+    }
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (other.CompareTag("PlayerBody"))
+    //    {
+    //        stunned = 0;
+
+    //        BodyController bodyCtr = other.GetComponent<BodyController>();
+    //        HeadController headController = GameObject.Find("PlayerHead").GetComponent<HeadController>();
+    //        if (level > bodyCtr.GetLevel())
+    //        {
+    //            bodyCtr.Bit();
+    //            MoveAfterBite(headController.bodyFoods);
+    //        }
+    //        else
+    //        {
+    //            if (true)
+    //            {
+    //                Stun();
+    //            }
+    //        }
+    //    }
+    //}
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Food"))
         {
-            level += 2;
-            if (level > ItemSpawn.kingLevel)
+            Eat();
+            if (moveSpeed < 16f)
             {
-                ItemSpawn.kingLevel = level;
-                ItemSpawn.SetKing2(gameObject);
-            }
-            levelText.text = enemyName +": " + level.ToString();
-            if (level % 10 == 0 || (level + 1) % 10 == 0)
-            {
-                GrowSnake();
-                SizeGrow();
+                IncreseSpeed();
             }
         }
         if (other.CompareTag("PlayerBody"))
         {
+            stunned = 0;
+
             BodyController bodyCtr = other.GetComponent<BodyController>();
             HeadController headController = GameObject.Find("PlayerHead").GetComponent<HeadController>();
             if (level > bodyCtr.GetLevel())
@@ -208,11 +270,15 @@ public class EnemyCollide : MonoBehaviour
             }
             else
             {
-                Stun();
+                if (isCollide == 0)
+                {
+                    Stun();
+                }
             }
         }
         if (other.CompareTag("Body") && (other.transform.parent.parent != gameObject.transform.parent))
         {
+            stunned = 0;
             EnemyBodyController bodyCtr = other.GetComponent<EnemyBodyController>();
             EnemyCollide enemyHead = other.transform.parent.parent.GetChild(0).GetComponent<EnemyCollide>();
             if (level >= bodyCtr.GetLevel())
@@ -231,7 +297,8 @@ public class EnemyCollide : MonoBehaviour
         }
         if (other.gameObject.CompareTag("PlayerHead"))
         {
-            HeadController head = other.gameObject.GetComponent<HeadController>();
+            stunned = 0;
+            HeadController head = other.gameObject.transform.parent.GetComponent<HeadController>();
             if (level > head.level)
             {
                 head.Die();
@@ -244,6 +311,7 @@ public class EnemyCollide : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Head") && (other.gameObject.transform.parent != gameObject.transform.parent))
         {
+            stunned = 0;
             EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
             if (level >= enemyHead.level)
             {
@@ -254,7 +322,8 @@ public class EnemyCollide : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Wall"))
         {
-            Stun();
+            stunned = 0;
+            WallStun();
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -273,9 +342,9 @@ public class EnemyCollide : MonoBehaviour
     }
     private void SizeGrow()
     {
-        if (level < 600)
+        if (level < 800)
         {
-            transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
+            transform.localScale += new Vector3(0.0125f, 0.0125f, 0.0125f);
             for (int i = 0; i < bodyParts.Count(); i++)
             {
                 bodyParts[i].transform.localScale = transform.localScale / 2;
@@ -296,7 +365,8 @@ public class EnemyCollide : MonoBehaviour
                 {
                     for (int k = 0; k < 2; k++)
                     {
-                        GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[j]), Quaternion.identity);
+                        FoodController food = Instantiate(foodPrefabs, RandomPos(bodyParts[j]), Quaternion.identity);
+                        foodPrefabs.SetSprite(data.foodSprites[randSkin]);
                         food.transform.localScale = RandomScale(bodyParts[j]);
                         food.transform.SetParent(fullFoods.transform);
                     }
@@ -331,7 +401,8 @@ public class EnemyCollide : MonoBehaviour
         {
             for (int k = 0; k < 2; k++)
             {
-                GameObject food = Instantiate(foodPrefabs, RandomPos(bodyParts[i]), Quaternion.identity);
+                FoodController food = Instantiate(foodPrefabs, RandomPos(bodyParts[i]), Quaternion.identity);
+                foodPrefabs.SetSprite(data.foodSprites[randSkin]);
                 food.transform.localScale = RandomScale(bodyParts[i]);
                 food.transform.SetParent(fullFoods.transform);
             }
@@ -341,7 +412,8 @@ public class EnemyCollide : MonoBehaviour
         }
         for (int k = 0; k < 3; k++)
         {
-            GameObject food = Instantiate(foodPrefabs, RandomPos(gameObject), Quaternion.identity);
+            FoodController food = Instantiate(foodPrefabs, RandomPos(gameObject), Quaternion.identity);
+            foodPrefabs.SetSprite(data.foodSprites[randSkin]);
             food.transform.localScale = RandomScale(gameObject);
             food.transform.SetParent(fullFoods.transform);
         }
@@ -350,8 +422,8 @@ public class EnemyCollide : MonoBehaviour
         {
             ItemSpawn.KingDie(gameObject);
         }
-        
-        RankingController.enemiesRank.Remove(gameObject.transform.parent.gameObject);       
+
+        RankingController.enemiesRank.Remove(gameObject.transform.parent.gameObject);
         ItemSpawn.SpawnEnemy(Mathf.Max(level / 2, level - 50));
         bodyFoods.Insert(0, gameObject.transform.position);
     }
@@ -392,13 +464,26 @@ public class EnemyCollide : MonoBehaviour
             {
                 stunned -= Time.deltaTime;
             }
-            else stunned = 0;
+            else if (stunned < 0)
+            {
+                stunned = 0;
+            }
         }
-        rb.transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
+        transform.Translate(movementDirection * moveSpeed * Time.deltaTime);
+        //rb.velocity = movementDirection * movementSpeed * Time.deltaTime;
         rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 1f);
 
     }
     public void Stun()
+    {
+
+        targetAngle += 180f;
+        rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
+        isCollide = 0.1f;
+        stunned = 0.5f;
+        foodTarget = null;
+    }
+    public void WallStun()
     {
         targetAngle = Mathf.Atan2(rb.transform.position.x, rb.transform.position.z) * Mathf.Rad2Deg + 180f;
         rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
@@ -438,7 +523,7 @@ public class EnemyCollide : MonoBehaviour
     }
     public void IncreseSpeed()
     {
-        movementSpeed += 0.035f;
+        moveSpeed += 0.05f;
     }
     public void SetAngle(float value)
     {
@@ -447,10 +532,10 @@ public class EnemyCollide : MonoBehaviour
     }
     public void SpeedUp(float add)
     {
-        movementSpeed += add;
+        moveSpeed += add;
     }
     public void SpeedDown(float add)
     {
-        movementSpeed -= add;
+        moveSpeed -= add;
     }
 }

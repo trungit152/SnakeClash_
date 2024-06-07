@@ -14,6 +14,7 @@ public class ChooseSkinCtr : MonoBehaviour
     private void Start()
     {
         CheckSelect();
+        coinText.text = data.coin.ToString();
     }
     public void BuyBtn()
     {

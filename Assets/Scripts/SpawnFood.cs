@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class SpawnFood : MonoBehaviour
 {
+    [SerializeField] private Sprite foodImg;
     [SerializeField] private int size = 175;
     [SerializeField] private GameObject foodPrefabs;
     [SerializeField] private GameObject fullFood;
@@ -52,6 +53,7 @@ public class SpawnFood : MonoBehaviour
             foodPrefabs.transform.localScale = new Vector3(radius, radius, radius);
             Vector3 randPos = new Vector3(rand.Next(-size / 2, size / 2) + (float)rand.NextDouble(), foodPrefabs.transform.localScale.x, rand.Next(-size / 2, size / 2) + (float)rand.NextDouble());
             GameObject food = Instantiate(foodPrefabs, randPos, Quaternion.identity);
+            food.GetComponent<FoodController>().SetSprite(foodImg);
             AddFood(food);           
             //EnemyMove2.AddNearFood(food);
             food.transform.SetParent(fullFood.transform);

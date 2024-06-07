@@ -3,14 +3,20 @@ using DG.Tweening;
 using ParadoxNotion.Design;
 public class FoodController : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer foodSprite;
     public static FoodController instance;
-    public float speed = 15f;
+    public float speed = 60f;
     private bool isBit;
     private Vector3 target;
     private void Awake()
     {
         instance = this;
         isBit = false;
+    }
+
+    public void SetSprite(Sprite img)
+    {
+        foodSprite.sprite = img;
     }
     private void Update()
     {
@@ -24,6 +30,7 @@ public class FoodController : MonoBehaviour
                 transform.Translate(moveDirection, Space.World);
             }
         }
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -44,6 +51,5 @@ public class FoodController : MonoBehaviour
             isBit = true;
             target = other.transform.position;
         }
-
     }
 }

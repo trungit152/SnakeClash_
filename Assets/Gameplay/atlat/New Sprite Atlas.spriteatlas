@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: New Sprite Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 7db4dd68363ffca4eb3ee331a685fe81, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 768b3f6084f09ac47ab6c93c8b910f01: 21300000
+    - f9d8a9e0a1b406c46a0ff1b2c8d348f8: 21300000
+    - edf6bd01907ddd44cbdbf4435334da26: 21300000
+    - a35c10e1a9ecc414da15426e8506b0b3: 21300000
+    - ca97e9421b1f17c49b619a72e315ca2e: 21300000
+    - 14c46973cbe3a3e4c9c732359483901a: 21300000
+    - c1d51cb4fcf0533429b25f439d2658b9: 21300000
+    - 79c7088541a481f469542a03ae488310: 21300000
+    - e29de3a5e83d78a44a19ae1086085eb8: 21300000
+    - 4097cf364aa30394b86a13ad28b20e0b: 21300000
+    - 320438a65ba42b74795e6bb21196b6d0: 21300000
+    - cc8822c72903c0b4891fdb826c1a4ee7: 21300000
+    - 8448b289159156f45b8514b888eb58fb: 21300000
+    - e3ff64f98f371b4428eb4bff020a1449: 21300000
+    - d3dcd1daec7417341bcdae72aa3f7197: 21300000
+    - f1decdea0c046e24d9c9296b17894622: 21300000
+    - 5e16af5b01ded9043861c66d62aeb4bf: 21300000
+    - e829740c0bcbfd746aabf9846b79492c: 21300000
+    - 2d1d8d1dd01b9f94996b07332d28b055: 21300000
+    - 4f8cd05d0de39a640a93638f7421c832: 21300000
+    - 88c9b63e828234747a5e2946648f63eb: 21300000
+    - ee0b8d7e7b4d7e64880104c3dd5813a7: 21300000
+    - 42eb9dfed18261444b8a610d158173b7: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 768b3f6084f09ac47ab6c93c8b910f01, type: 3}
+  - {fileID: 21300000, guid: f9d8a9e0a1b406c46a0ff1b2c8d348f8, type: 3}
+  - {fileID: 21300000, guid: edf6bd01907ddd44cbdbf4435334da26, type: 3}
+  - {fileID: 21300000, guid: a35c10e1a9ecc414da15426e8506b0b3, type: 3}
+  - {fileID: 21300000, guid: ca97e9421b1f17c49b619a72e315ca2e, type: 3}
+  - {fileID: 21300000, guid: 14c46973cbe3a3e4c9c732359483901a, type: 3}
+  - {fileID: 21300000, guid: c1d51cb4fcf0533429b25f439d2658b9, type: 3}
+  - {fileID: 21300000, guid: 79c7088541a481f469542a03ae488310, type: 3}
+  - {fileID: 21300000, guid: e29de3a5e83d78a44a19ae1086085eb8, type: 3}
+  - {fileID: 21300000, guid: 4097cf364aa30394b86a13ad28b20e0b, type: 3}
+  - {fileID: 21300000, guid: 320438a65ba42b74795e6bb21196b6d0, type: 3}
+  - {fileID: 21300000, guid: cc8822c72903c0b4891fdb826c1a4ee7, type: 3}
+  - {fileID: 21300000, guid: 8448b289159156f45b8514b888eb58fb, type: 3}
+  - {fileID: 21300000, guid: e3ff64f98f371b4428eb4bff020a1449, type: 3}
+  - {fileID: 21300000, guid: d3dcd1daec7417341bcdae72aa3f7197, type: 3}
+  - {fileID: 21300000, guid: f1decdea0c046e24d9c9296b17894622, type: 3}
+  - {fileID: 21300000, guid: 5e16af5b01ded9043861c66d62aeb4bf, type: 3}
+  - {fileID: 21300000, guid: e829740c0bcbfd746aabf9846b79492c, type: 3}
+  - {fileID: 21300000, guid: 2d1d8d1dd01b9f94996b07332d28b055, type: 3}
+  - {fileID: 21300000, guid: 4f8cd05d0de39a640a93638f7421c832, type: 3}
+  - {fileID: 21300000, guid: 88c9b63e828234747a5e2946648f63eb, type: 3}
+  - {fileID: 21300000, guid: ee0b8d7e7b4d7e64880104c3dd5813a7, type: 3}
+  - {fileID: 21300000, guid: 42eb9dfed18261444b8a610d158173b7, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - skin chet 1
+  - than 4.2
+  - than 1
+  - duoi 1
+  - skin 4
+  - skin 5
+  - skin chet 3
+  - than 2
+  - than 5.1
+  - skin chet 2
+  - than 5.2
+  - skin 2
+  - skin chet 5
+  - skin 1
+  - than 3.2
+  - Duoi 2
+  - than 4.1
+  - skin chet 4
+  - skin 3
+  - duoi 4
+  - than 3.1
+  - Duoi 3
+  - duoi 5
+  m_RenderDataMap: {}
+  m_Tag: New Sprite Atlas
+  m_IsVariant: 0

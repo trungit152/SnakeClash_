@@ -6,8 +6,6 @@ using static Cinemachine.DocumentationSortingAttribute;
 public class TimeController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timeText;
-    [SerializeField] private GameObject losePanel;
-    [SerializeField] private GameObject winPanel;
     [SerializeField] private DataSO data;
     [SerializeField] private TextMeshProUGUI targetText;
     [SerializeField] private TextMeshProUGUI top1Name;
@@ -28,6 +26,8 @@ public class TimeController : MonoBehaviour
     [SerializeField] private GameObject rankingPanel;
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject inGameRanking;
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private GameObject top4Frame;
 
     private float time;
     private string minute, second;
@@ -88,8 +88,6 @@ public class TimeController : MonoBehaviour
         targetLevel = 200 + data.currentLevel*200;
         targetText.text = "Boss level: " + targetLevel.ToString();
         time = 80;
-        losePanel.SetActive(false);
-        winPanel.SetActive(false);
     }
     void Update()
     {
@@ -97,17 +95,36 @@ public class TimeController : MonoBehaviour
         if(time < 0) 
         {
             time = 0;
+            RankingController.Sort();
+            RankingController.UpdateText();
             MinimapController.HideMinimap();
             inGameUI.SetActive(false);
             top1Name.text = RankingController.top1name.text;
             top1Score.text = RankingController.top1score.text;
+            top1Name.color = RankingController.top1name.color;
+            top1Score.color = RankingController.top1score.color;
+
             top2Name.text = RankingController.top2name.text;
             top2Score.text = RankingController.top2score.text;
+            top2Name.color = RankingController.top2name.color;
+            top2Score.color = RankingController.top2score.color;
+
             top3Name.text = RankingController.top3name.text;
             top3Score.text = RankingController.top3score.text;
+            top3Name.color = RankingController.top3name.color;
+            top3Score.color = RankingController.top3score.color;
+
             playerName.text = RankingController.playerName.text;
             playerRank.text = RankingController.playerRank.text;
             playerScore.text = RankingController.playerScore.text;
+            playerName.color = RankingController.playerName.color;
+            playerRank.color = RankingController.playerRank.color;
+            playerScore.color = RankingController.playerScore.color;
+            if(playerName.text == null)
+            {
+                top4Frame.SetActive(false);
+            }
+
             scoreText.text = HeadController.level.ToString();
             RankingController.TurnOffText();
             HeadController.TurnOffLevelText();
@@ -117,12 +134,14 @@ public class TimeController : MonoBehaviour
             Time.timeScale = 0f;
             if(HeadController.level < targetLevel)
             {
-                losePanel.SetActive(true);
+                statusText.text = "FAILED";
+                statusText.color = Color.red;
                 rankingPanel.SetActive(true);
             }
             else
             {
-                winPanel.SetActive(true);
+                statusText.text = "VICTORY";
+                statusText.color = Color.green;
                 rankingPanel.SetActive(true);
                 data.currentLevel += 1;
             }

@@ -6,7 +6,7 @@ public class ItemSpawn : MonoBehaviour
     [SerializeField] private GameObject speedUp;
     [SerializeField] private GameObject magnite;
     [SerializeField] private GameObject enemy;
-    [SerializeField] private Camera mainCamera;
+    public Camera mainCamera;
     [SerializeField] private DataSO data;
     [SerializeField] private GameObject fullEnemy;
 
@@ -14,7 +14,7 @@ public class ItemSpawn : MonoBehaviour
     public int kingLevel;
     //[SerializeField] private Camera cameraSite;
     public GameObject king;
-    private float cd = 10f;
+    //private float cd = 10f;
     private float maxX;
     private float minX;
     private float minZ;
@@ -100,36 +100,36 @@ public class ItemSpawn : MonoBehaviour
     }
     private void Update()
     {
-        cd -= Time.deltaTime;
-        if (cd < 0)
-        {
-            cd = 10f;
-            Spawn();
-        }
+        //cd -= Time.deltaTime;
+        //if (cd < 0)
+        //{
+        //    cd = 10f;
+        //    Spawn();
+        //}
     }
 
     private Vector3 RandomSpawnPos()
     {
-        Vector3 pos = new Vector3(Random.Range(minX, maxX), 1.08f, Random.Range(minZ, maxZ));
+        Vector3 pos = new Vector3(Random.Range(minX, maxX), 1f, Random.Range(minZ, maxZ));
         Vector3 viewportPoint = mainCamera.WorldToViewportPoint(pos);
         while (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1 && viewportPoint.z > 0)
         {
-            pos = new Vector3(Random.Range(minX, maxX), 1.08f, Random.Range(minZ, maxZ));
+            pos = new Vector3(Random.Range(minX, maxX), 1f, Random.Range(minZ, maxZ));
             viewportPoint = mainCamera.WorldToViewportPoint(pos);        }
         return pos;
     }
-    private void Spawn()
-    {
-        int i = Random.Range(1, 2);
-        if (i == 1)
-        {
-            GameObject.Instantiate(speedUp, RandomSpawnPos(), Quaternion.identity);
-        }
-        else
-        {
-            GameObject.Instantiate(magnite, RandomSpawnPos(), Quaternion.identity);
-        }
-    }
+    //private void Spawn()
+    //{
+    //    int i = Random.Range(1, 2);
+    //    if (i == 1)
+    //    {
+    //        GameObject.Instantiate(speedUp, RandomSpawnPos(), Quaternion.identity);
+    //    }
+    //    else
+    //    {
+    //        GameObject.Instantiate(magnite, RandomSpawnPos(), Quaternion.identity);
+    //    }
+    //}
     public void SpawnEnemy(int level)
     {
         //GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
@@ -138,14 +138,13 @@ public class ItemSpawn : MonoBehaviour
         //EnemyCollide enemyCollide = enemy.transform.GetChild(0).GetComponent<EnemyCollide>();
         //enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
         //enemyCollide.level = level;
-        GameObject enemySpawn = Instantiate(enemy, RandomSpawnPos(), Quaternion.identity);
+        GameObject enemySpawn = Instantiate(enemy, Vector3.zero, Quaternion.identity);
+        enemySpawn.transform.GetChild(0).transform.position = RandomSpawnPos();
         enemies.Add(enemySpawn);
         enemySpawn.transform.SetParent(fullEnemy.transform);
         RankingController.enemiesRank.Add(enemySpawn);
         EnemyCollide enemyCollide = enemySpawn.transform.GetChild(0).GetComponent<EnemyCollide>();
         enemyCollide.enemyName = data.names[Random.Range(0, data.names.Count - 1)];
         enemyCollide.level = level;
-        
     }
-
 }

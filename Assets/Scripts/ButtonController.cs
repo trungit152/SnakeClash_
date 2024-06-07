@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static Cinemachine.DocumentationSortingAttribute;
+using System.Collections.Generic;
 
 public class ButtonController : MonoBehaviour
 {
@@ -15,6 +15,22 @@ public class ButtonController : MonoBehaviour
     [SerializeField] DataSO data;
     [SerializeField] private Button btnRestart;
 
+    [SerializeField] private Image magniteImg;
+    [SerializeField] private Image magniteBg;
+    [SerializeField] private TextMeshProUGUI magniteCdText;
+    private float magniteCd;
+
+    [SerializeField] private Image zoomOutImg;
+    [SerializeField] private Image zoomOutBg;
+    [SerializeField] private TextMeshProUGUI zoomOutCdText;
+    private float zoomOutCd;
+
+    [SerializeField] private Image growImg;
+    [SerializeField] private Image growBg;
+    [SerializeField] private TextMeshProUGUI growCdText;
+    private float growCd;
+
+    private bool isStarted = false;
 
 
     MinimapController minimapController;
@@ -78,6 +94,68 @@ public class ButtonController : MonoBehaviour
         increseItemText.text = "Cost: " + data.increseItemCost.ToString();
         coinText.text = data.coin.ToString();
     }
+    private void Update()
+    {
+        SkillCdUpdate();
+        if (!isStarted && (Input.touchCount > 0 || Input.GetMouseButtonDown(0)))
+        {
+            isStarted = true;
+            Time.timeScale = 1.0f;
+            inGameUI.SetActive(true);
+            HeadController.SetStat();
+            startPanel.SetActive(false);
+            MinimapController.ShowMinimap();
+        }
+    }
+
+    private void SkillCdUpdate()
+    {
+        if (magniteCd > 0)
+        {
+            magniteBg.color = Color.gray;
+            magniteImg.color = Color.gray;
+            magniteCd -= Time.deltaTime;
+            magniteCdText.text = Mathf.RoundToInt(magniteCd).ToString();
+        }
+        else if (magniteCd < 0)
+        {
+            magniteBg.color = Color.white;
+            magniteImg.color = Color.white;
+            magniteCd = 0;
+            magniteCdText.text = null;
+        }
+
+        if (zoomOutCd > 0)
+        {
+            zoomOutBg.color = Color.gray;
+            zoomOutImg.color = Color.gray;
+            zoomOutCd -= Time.deltaTime;
+            zoomOutCdText.text = Mathf.RoundToInt(zoomOutCd).ToString();
+        }
+        else if (zoomOutCd < 0)
+        {
+            zoomOutBg.color = Color.white;
+            zoomOutImg.color = Color.white;
+            zoomOutCd = 0;
+            zoomOutCdText.text = null;
+        }
+
+        if (growCd > 0)
+        {
+            growBg.color = Color.gray;
+            growImg.color = Color.gray;
+            growCd -= Time.deltaTime;
+            growCdText.text = Mathf.RoundToInt(growCd).ToString();
+        }
+        else if (growCd < 0)
+        {
+            growBg.color = Color.white;
+            growImg.color = Color.white;
+            growCd = 0;
+            growCdText.text = null;
+        }
+    }
+    
     public void GoToPlayClick()
     {
         SceneManager.LoadScene("InGameScene");
@@ -135,10 +213,38 @@ public class ButtonController : MonoBehaviour
     }
     public void IncreseRadius()
     {
-        HeadController.Magnite();
+        if (data.coin >= 1000 && magniteCd == 0)
+        {
+            magniteCd = 15f;
+            HeadController.Magnite();
+            data.coin -= 1000;
+            coinText.text = data.coin.ToString();
+        }
     }
+
+   
     public void Grow()
     {
-        HeadController.LevelUp();
+        if(data.coin >= 1000 && growCd == 0)
+        {
+            growCd = 0.5f;
+            for (int i = 0; i < 5; i++)
+            {
+                HeadController.LevelUp();
+            }
+            data.coin -= 1000;
+            coinText.text = data.coin.ToString();
+        }
+    }
+
+    public void ZoomOutBtn()
+    {
+        if (data.coin >= 1000 && zoomOutCd == 0)
+        {
+            zoomOutCd = 15f;
+            HeadController.ZoomOut();
+            data.coin -= 1000;
+            coinText.text = data.coin.ToString();
+        }
     }
 }

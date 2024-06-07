@@ -30,7 +30,7 @@ public class BossController : MonoBehaviour
         }
         else if (other.CompareTag("180deg"))
         {
-            targetAngle = 180f;
+            targetAngle = 180f; 
         }
         else if (other.CompareTag("90deg"))
         {

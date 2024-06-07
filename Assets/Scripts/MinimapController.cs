@@ -12,6 +12,10 @@ public class MinimapController : MonoBehaviour
     private  float cameraHeight = 30f;
     void Update()
     {
+
+    }
+    private void FixedUpdate()
+    {
         if (player != null)
         {
             Vector3 newPosition = new Vector3(player.position.x, cameraHeight, player.position.z);

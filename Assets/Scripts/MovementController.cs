@@ -19,7 +19,7 @@ public class MovementController : MonoBehaviour
     private float targetAngle;
     private List<Vector3> positionHistory;
     private Vector3 movementDirection;
-    public int gap = 6;
+    public int gap = 2;
     public List<GameObject> bodyParts;
     private bool isJoystick;
     private Rigidbody rb;
@@ -33,7 +33,7 @@ public class MovementController : MonoBehaviour
         {
             if (headController == null)
             {
-                headController = gameObject.GetComponent<HeadController>();
+                headController = GameObject.Find("PlayerHead").GetComponent<HeadController>();
             }
             return headController;
         }
@@ -61,6 +61,10 @@ public class MovementController : MonoBehaviour
     }
     private void Update()
     {
+        
+    }
+    private void FixedUpdate()
+    {
         Move();
         mainCamera.transform.position = snakeHead.transform.position + offset;
     }
@@ -74,9 +78,9 @@ public class MovementController : MonoBehaviour
         targetAngle += 180f;
         canMove = 0.5f;
     }
-    public void CameraUp()
+    public void CameraUp(float delta)
     {
-        StartCoroutine(ChangeCameraHeight(camSize, camSize + 4f, 0.5f));
+        StartCoroutine(ChangeCameraHeight(camSize, camSize + delta, 0.5f));
     }
     public IEnumerator ChangeCameraHeight(float a, float b, float t)
     {
@@ -94,7 +98,7 @@ public class MovementController : MonoBehaviour
     private void MoveBody()
     {
         positionHistory.Insert(0, firstBody.transform.position);
-        if (positionHistory.Count > 1000)
+        if (positionHistory.Count > Mathf.Min(HeadController.level+50, 600))
         {
             positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
         }
@@ -128,7 +132,7 @@ public class MovementController : MonoBehaviour
                 movementDirection = new Vector3(0, 0, 1);
                 targetAngle = Mathf.Atan2(joystick.Direction.x, joystick.Direction.y) * Mathf.Rad2Deg;
             }
-            rb.transform.Translate(movementDirection * movementSpeed * Time.deltaTime);
+            rb.transform.Translate(movementDirection * movementSpeed * Time.fixedDeltaTime);
             rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
         }
         MoveBody();
@@ -140,13 +144,13 @@ public class MovementController : MonoBehaviour
     }
     public void Collide()
     {
-        canMove = 0.5f;
+        canMove = 0.3f;
         targetAngle = Mathf.Atan2(rb.transform.position.x, rb.transform.position.z) * Mathf.Rad2Deg + 180f;
         rb.transform.rotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.Euler(0, targetAngle, 0), 180f);
     }
     public void IncreaseSpeed()
     {
-        movementSpeed += 0.035f;
+        movementSpeed += 0.05f;
     }
     public void SpeedUp(float add)
     {
