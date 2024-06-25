@@ -15,7 +15,6 @@ public class FlickerText : MonoBehaviour
     public void Show()
     {
         tapText.text = null;
-        Debug.Log("Ok");
     }
     public void Hide()
     {

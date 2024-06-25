@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1113530295939750236
 Transform:
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8448b289159156f45b8514b888eb58fb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 768b3f6084f09ac47ab6c93c8b910f01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,7 +99,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1375436946923982846
 Transform:
@@ -185,7 +185,7 @@ GameObject:
   m_TagString: Food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1180824754329786384
 Transform:
@@ -196,7 +196,7 @@ Transform:
   m_GameObject: {fileID: 5263689502216949429}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.233, y: 0, z: 100}
+  m_LocalPosition: {x: 0, y: 100, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -246,4 +246,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodSprite: {fileID: 3384916804045638913}
+  originalFoodSprite: {fileID: 21300000, guid: 5aeb6ea501fcfbd49b91b70e04ab52ba, type: 3}
   speed: 15

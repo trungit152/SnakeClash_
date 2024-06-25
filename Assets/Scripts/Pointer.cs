@@ -7,6 +7,7 @@ using CodeMonkey.Utils;
 public class Pointer : MonoBehaviour
 {
     [SerializeField] private GameObject playerHead;
+    [SerializeField] private GameObject img;
     private GameObject targetPos;
     private RectTransform pointerRectTransform;
     private float angle;
@@ -27,8 +28,6 @@ public class Pointer : MonoBehaviour
             itemSpawn = value;
         }
     }
-
-    public GameObject mid;
 
     private void Awake()
     {
@@ -53,20 +52,27 @@ public class Pointer : MonoBehaviour
             Vector3 res = new Vector3(toPos.x - fromPos.x, 0, toPos.z - fromPos.z);
             angle = 360 - Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg;
             pointerRectTransform.localEulerAngles = new Vector3(0, 0, angle);
-            if (mid != null && mainCamera != null)
+            if (mainCamera != null)
             {
-                GameObject img = gameObject.transform.GetChild(0).gameObject;
-                Vector3 viewportPoint = mainCamera.WorldToViewportPoint(targetPos.transform.position);
-                if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1 && viewportPoint.z > 0)
+                if(CheckViewPos(targetPos.transform.position, -0.1f))
                 {
                     img.SetActive(false);
                 }
                 else
                 {
-                    img.SetActive(true);
+                    img.SetActive(true);   
                 }
             }
         }
+    }
+    private bool CheckViewPos(Vector3 pos, float buffer = 0.1f)
+    {
+        Vector3 viewportPoint = mainCamera.WorldToViewportPoint(pos);
+        if (viewportPoint.x > -buffer && viewportPoint.x < 1 + buffer && viewportPoint.y > -buffer && viewportPoint.y < 1 + buffer && viewportPoint.z > 0)
+        {
+            return true;
+        }
+        return false;
     }
     public void SetKing(GameObject king)
     { 

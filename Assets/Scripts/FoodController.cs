@@ -4,8 +4,9 @@ using ParadoxNotion.Design;
 public class FoodController : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer foodSprite;
+    [SerializeField] private Sprite originalFoodSprite;
     public static FoodController instance;
-    public float speed = 60f;
+    public float speed = 80f;
     private bool isBit;
     private Vector3 target;
     private void Awake()
@@ -17,6 +18,10 @@ public class FoodController : MonoBehaviour
     public void SetSprite(Sprite img)
     {
         foodSprite.sprite = img;
+    }
+    private void Start()
+    {
+
     }
     private void Update()
     {
@@ -37,14 +42,16 @@ public class FoodController : MonoBehaviour
         if (other.CompareTag("PlayerHead"))
         {
             SpawnFood.instance.foods.Remove(gameObject);
-            Destroy(gameObject);
+            isBit = false;
+            gameObject.SetActive(false);    
         }
         if (other.CompareTag("Head"))
         {
             EnemyCollide enemy = other.GetComponent<EnemyCollide>();
             enemy.RemoveTarget();
             SpawnFood.instance.foods.Remove(gameObject);
-            Destroy(gameObject);
+            isBit = false;
+            gameObject.SetActive(false);
         }
         if (other.CompareTag("HitBox"))
         {

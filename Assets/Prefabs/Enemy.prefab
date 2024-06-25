@@ -126,8 +126,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 7
+  m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 4
@@ -413,8 +413,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.9526583, z: 1}
-  m_Center: {x: 0, y: 0.09838161, z: 0}
+  m_Size: {x: 1, y: 2.469023, z: 1}
+  m_Center: {x: 0, y: -0.15980186, z: 0}
 --- !u!54 &2759763945292085260
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -483,6 +483,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: df1ec478658daaf49a0e355fe476c1e0, type: 2}
   firstBody: {fileID: 5511513820920564885}
   headSkin: {fileID: 2644566197732723262}
+  mainCamera: {fileID: 0}
   enemyName: 
   targetAngle: 0
   isTarget: 0

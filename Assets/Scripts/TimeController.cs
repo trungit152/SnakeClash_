@@ -85,7 +85,7 @@ public class TimeController : MonoBehaviour
     void Start()
     {
  
-        targetLevel = 200 + data.currentLevel*200;
+        targetLevel = 100 + data.currentLevel*100;
         targetText.text = "Boss level: " + targetLevel.ToString();
         time = 80;
     }

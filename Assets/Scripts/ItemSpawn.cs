@@ -57,12 +57,13 @@ public class ItemSpawn : MonoBehaviour
     private void Awake()
     {
         enemies = new List<GameObject>();
-        maxX = 85;
-        minX = -85;
-        maxZ = 85;
-        minZ = -85;
+        int t = 55;
+        maxX = t;
+        minX = -t;
+        maxZ = t;
+        minZ = -t;
         kingLevel = 0;
-        for (int i = 0; i < 35; i++)
+        for (int i = 0; i < 20; i++)
         {
             int level = Random.Range(3, 15);
             SpawnEnemy(level);
@@ -76,6 +77,7 @@ public class ItemSpawn : MonoBehaviour
     }
     private void Start()
     {
+        mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         king.transform.GetChild(1).gameObject.SetActive(true);
     }
     public void SetKing2(GameObject king2)
@@ -110,12 +112,13 @@ public class ItemSpawn : MonoBehaviour
 
     private Vector3 RandomSpawnPos()
     {
-        Vector3 pos = new Vector3(Random.Range(minX, maxX), 1f, Random.Range(minZ, maxZ));
+        Vector3 pos = new Vector3(Random.Range(minX, maxX), 1.5f, Random.Range(minZ, maxZ));
         Vector3 viewportPoint = mainCamera.WorldToViewportPoint(pos);
-        while (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1 && viewportPoint.z > 0)
+        while (viewportPoint.x > -0.2f && viewportPoint.x < 1 + 0.2f && viewportPoint.y > -0.2f && viewportPoint.y < 1 + 0.2f && viewportPoint.z > 0)
         {
-            pos = new Vector3(Random.Range(minX, maxX), 1f, Random.Range(minZ, maxZ));
-            viewportPoint = mainCamera.WorldToViewportPoint(pos);        }
+            pos = new Vector3(Random.Range(minX, maxX), 1.5f, Random.Range(minZ, maxZ));
+            viewportPoint = mainCamera.WorldToViewportPoint(pos);        
+        }
         return pos;
     }
     //private void Spawn()

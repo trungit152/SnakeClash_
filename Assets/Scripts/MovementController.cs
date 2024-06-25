@@ -19,7 +19,7 @@ public class MovementController : MonoBehaviour
     private float targetAngle;
     private List<Vector3> positionHistory;
     private Vector3 movementDirection;
-    public int gap = 2;
+    public int gap = 3;
     public List<GameObject> bodyParts;
     private bool isJoystick;
     private Rigidbody rb;
@@ -150,7 +150,7 @@ public class MovementController : MonoBehaviour
     }
     public void IncreaseSpeed()
     {
-        movementSpeed += 0.05f;
+        movementSpeed += 0.06f;
     }
     public void SpeedUp(float add)
     {

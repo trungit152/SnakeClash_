@@ -15,21 +15,27 @@ public class VariableJoystick : Joystick
 
     public void SetMode(JoystickType joystickType)
     {
-        this.joystickType = joystickType;
-        if(joystickType == JoystickType.Fixed)
+        if (!isMoving)
         {
-            background.anchoredPosition = fixedPosition;
-            background.gameObject.SetActive(true);
+            this.joystickType = joystickType;
+            if (joystickType == JoystickType.Fixed)
+            {
+                background.anchoredPosition = fixedPosition;
+                background.gameObject.SetActive(true);
+            }
+            else
+                background.gameObject.SetActive(false);
         }
-        else
-            background.gameObject.SetActive(false);
     }
 
     protected override void Start()
     {
-        base.Start();
-        fixedPosition = background.anchoredPosition;
-        SetMode(joystickType);
+        if (!isMoving)
+        {
+            base.Start();
+            fixedPosition = background.anchoredPosition;
+            SetMode(joystickType);
+        }
     }
 
     public override void OnPointerDown(PointerEventData eventData)

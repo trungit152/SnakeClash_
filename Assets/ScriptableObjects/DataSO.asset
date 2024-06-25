@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DataSO
   m_EditorClassIdentifier: 
   startLevel: 5
-  startSpeed: 8
+  startSpeed: 5
   itemTime: 2.5
-  coin: 999999
+  coin: 848894
   increseSpeedCost: 500
   increseLevelCost: 500
   increseItemCost: 500
-  currentLevel: 1
+  currentLevel: 3
   skinIndex: 0
   chooseIndex: 0
   foodSprites:
@@ -232,6 +232,7 @@ MonoBehaviour:
   - Gabi
   - Mario
   - Lia
+  - Trungdz
   - Nico
   - Tiff
   - Pablo

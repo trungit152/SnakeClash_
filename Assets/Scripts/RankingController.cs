@@ -81,7 +81,7 @@ public class RankingController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if(playerHead != null)
+            if (playerHead != null)
             {
                 HeadController player = playerHead.GetComponent<HeadController>();
                 if (enemiesRank.IndexOf(playerHead) > 2)
@@ -176,8 +176,8 @@ public class RankingController : MonoBehaviour
                         top1score.text = enemy1.level.ToString();
                         top1name.color = Color.white;
                         top1score.color = Color.white;
-                        top2name.text = enemy1.enemyName;
-                        top2score.text = enemy1.level.ToString();
+                        top2name.text = enemy2.enemyName;
+                        top2score.text = enemy2.level.ToString();
                         top2name.color = Color.white;
                         top2score.color = Color.white;
                     }
@@ -205,7 +205,7 @@ public class RankingController : MonoBehaviour
                 }
             }
         }
-        if(playerHead != null)
+        if (playerHead != null)
         {
             HeadController player = playerHead.GetComponent<HeadController>();
             for (int i = 0; i < enemiesRank.Count; i++)
@@ -247,14 +247,14 @@ public class RankingController : MonoBehaviour
     {
         if (chooseEnemyToCheatTime <= 0)
         {
-            randEnemy = Random.Range(0, 8);
-            randEnemy2 = Random.Range(0, 8);
+            randEnemy = Random.Range(0, 10);
+            randEnemy2 = Random.Range(0, 10);
             while (randEnemy == enemiesRank.IndexOf(playerHead) || randEnemy2 == enemiesRank.IndexOf(playerHead))
             {
-                randEnemy = Random.Range(0, 8);
+                randEnemy = Random.Range(0, 10);
                 while (randEnemy2 == randEnemy)
                 {
-                    randEnemy2 = Random.Range(0, 8);
+                    randEnemy2 = Random.Range(0, 10);
                 }
             }
 
@@ -274,7 +274,7 @@ public class RankingController : MonoBehaviour
         Vector3 viewportPoint = mainCamera.WorldToViewportPoint(enemy.transform.position);
         if (delta > 0 && delta < 800)
         {
-            if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1 && viewportPoint.z > 0)
+            if (viewportPoint.x > -0.3f && viewportPoint.x < 1+ 0.3f && viewportPoint.y > -0.3f && viewportPoint.y < 1+ 0.3f && viewportPoint.z > 0)
             {
                 return;
             }

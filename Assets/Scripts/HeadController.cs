@@ -40,9 +40,10 @@ public class HeadController : MonoBehaviour
 
     public static HeadController instance;
     public List<Vector3> bodyFoods;
+    private bool isBit = false;
     private int skinCounter = 0;
     private int skinPath_;
-    private float gapf = 2f;
+    private float gapf = 3f;
     private float speedUpAdd = 5f;
     private float itemTime;
     private bool isSpeedUp;
@@ -181,21 +182,16 @@ public class HeadController : MonoBehaviour
             if (MovementController.bodyParts.Count() != 0)
             {
                 body.transform.localScale = MovementController.bodyParts[0].transform.localScale;
-                if (MovementController.bodyParts.Count > 1)
+                if (!isBit)
                 {
-                    //body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position;
-                    //Renderer renderer = body.GetComponent<Renderer>();
-                    //renderer.sortingOrder = layerOverride;
                     body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 2].transform.position - new Vector3(0, 0.01f, 0);
+                    MovementController.bodyParts.Insert(MovementController.bodyParts.Count - 1, body);
                 }
                 else
                 {
-                    //body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position;
-                    //Renderer renderer = body.GetComponent<Renderer>();
-                    //renderer.sortingOrder = layerOverride;
                     body.transform.position = MovementController.bodyParts[MovementController.bodyParts.Count - 1].transform.position - new Vector3(0, 0.01f, 0);
+                    MovementController.bodyParts.Insert(MovementController.bodyParts.Count, body);
                 }
-                MovementController.bodyParts.Insert(MovementController.bodyParts.Count-1, body);
             }
             else
             {
@@ -220,7 +216,7 @@ public class HeadController : MonoBehaviour
             MinimapController.MiniCameraUp();
         }
         levelText.text = "Level " + level.ToString();
-        if (level % 5 == 0)
+        if (level % 7 == 0)
         {
             GrowSnake();
             SizeGrow();
@@ -342,7 +338,7 @@ public class HeadController : MonoBehaviour
         if (level < 800)
         {
             transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
-            miniMapGFX.transform.localScale -= new Vector3(0.02f, 0.02f, 0.02f);
+            miniMapGFX.transform.localScale -= new Vector3(0.022f, 0.022f, 0.022f);
             for (int i = 0; i < MovementController.bodyParts.Count(); i++)
             {
                 MovementController.bodyParts[i].transform.localScale = transform.localScale;
@@ -354,6 +350,7 @@ public class HeadController : MonoBehaviour
 
     public void HeadBit()
     {
+        isBit = true;
         bodyFoods = new List<Vector3>();
         for (int i = 0; i < MovementController.bodyParts.Count(); i++)
         {

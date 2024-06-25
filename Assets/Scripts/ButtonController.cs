@@ -215,7 +215,7 @@ public class ButtonController : MonoBehaviour
     {
         if (data.coin >= 1000 && magniteCd == 0)
         {
-            magniteCd = 15f;
+            magniteCd = 5f;
             HeadController.Magnite();
             data.coin -= 1000;
             coinText.text = data.coin.ToString();
@@ -228,7 +228,7 @@ public class ButtonController : MonoBehaviour
         if(data.coin >= 1000 && growCd == 0)
         {
             growCd = 0.5f;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 HeadController.LevelUp();
             }
@@ -241,7 +241,7 @@ public class ButtonController : MonoBehaviour
     {
         if (data.coin >= 1000 && zoomOutCd == 0)
         {
-            zoomOutCd = 15f;
+            zoomOutCd = 6f;
             HeadController.ZoomOut();
             data.coin -= 1000;
             coinText.text = data.coin.ToString();
