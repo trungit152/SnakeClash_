@@ -15,11 +15,11 @@ MonoBehaviour:
   startLevel: 5
   startSpeed: 5
   itemTime: 2.5
-  coin: 848894
+  coin: 999999
   increseSpeedCost: 500
   increseLevelCost: 500
   increseItemCost: 500
-  currentLevel: 3
+  currentLevel: 1
   skinIndex: 0
   chooseIndex: 0
   foodSprites:
@@ -232,7 +232,6 @@ MonoBehaviour:
   - Gabi
   - Mario
   - Lia
-  - Trungdz
   - Nico
   - Tiff
   - Pablo
@@ -281,4 +280,23 @@ MonoBehaviour:
   - Richa
   - Yasuo
   - Zeros
+  - Trungdz
   - Pepe
+  SnakeUIPosX:
+  - 582.8396
+  - 584.76227
+  - 619.9149
+  - 649.9921
+  - 664.5785
+  - 659.1536
+  - 636.2483
+  - 603.433
+  SnakeUIRotateZ:
+  - -0.018680822
+  - -0.013150249
+  - 0.04116522
+  - 0.08786723
+  - 0.13470632
+  - 0.17362584
+  - 0.19929975
+  - 0.2147872

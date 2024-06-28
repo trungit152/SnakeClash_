@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Utilities.Common;
 using static Cinemachine.DocumentationSortingAttribute;
 public class TimeController : MonoBehaviour
 {
@@ -28,8 +29,11 @@ public class TimeController : MonoBehaviour
     [SerializeField] private GameObject inGameRanking;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private GameObject top4Frame;
+    [SerializeField] private TextMeshProUGUI timeOutText;
 
     private float time;
+    private bool checkCount;
+    private bool checkEnd;
     private string minute, second;
     private int targetLevel;
 
@@ -84,15 +88,25 @@ public class TimeController : MonoBehaviour
     }
     void Start()
     {
- 
+        //BackgroundMusic.instance.BackMusicVolume(0.5f);
+        checkCount = true;
+        checkEnd = true;
+        timeOutText.SetActive(false);
         targetLevel = 100 + data.currentLevel*100;
         targetText.text = "Boss level: " + targetLevel.ToString();
         time = 80;
     }
-    void Update()
+    private void PlayCountDownSFX()
     {
-        ShowTime();
-        if(time < 0) 
+        if (checkCount)
+        {
+            SoundController.instance.PlaySFX(SoundController.instance.countDownSFX);
+            checkCount = false;
+        }
+    }
+    private void PlayEndGameSFX()
+    {
+        if (checkEnd)
         {
             time = 0;
             RankingController.Sort();
@@ -120,7 +134,7 @@ public class TimeController : MonoBehaviour
             playerName.color = RankingController.playerName.color;
             playerRank.color = RankingController.playerRank.color;
             playerScore.color = RankingController.playerScore.color;
-            if(playerName.text == null)
+            if (playerName.text == null)
             {
                 top4Frame.SetActive(false);
             }
@@ -128,24 +142,41 @@ public class TimeController : MonoBehaviour
             scoreText.text = HeadController.level.ToString();
             RankingController.TurnOffText();
             HeadController.TurnOffLevelText();
-            inGameRanking.SetActive(false );
+            inGameRanking.SetActive(false);
             arrow.SetActive(false);
             data.coin += HeadController.level;
             Time.timeScale = 0f;
-            if(HeadController.level < targetLevel)
+            if (HeadController.level < targetLevel)
             {
+                SoundController.instance.PlaySFX(SoundController.instance.loseSFX);
                 statusText.text = "FAILED";
                 statusText.color = Color.red;
                 rankingPanel.SetActive(true);
             }
             else
             {
+                SoundController.instance.PlaySFX(SoundController.instance.winSFX);
                 statusText.text = "VICTORY";
                 statusText.color = Color.green;
                 rankingPanel.SetActive(true);
                 data.currentLevel += 1;
             }
-
+            timeOutText.SetActive(false);
+            checkEnd = false;
+        }
+    }
+    void Update()
+    {
+        ShowTime();
+        if(time < 5 && time > 0.001)
+        {
+            PlayCountDownSFX();
+            timeOutText.text = timeText.text;
+            timeOutText.SetActive(true);
+        }
+        if(time < 0) 
+        {
+            PlayEndGameSFX();
         }
     }
     private void ShowTime()

@@ -94,8 +94,8 @@ public class SnakeSkinCtr : MonoBehaviour
 
     void Start()
     {
+        BackgroundMusic.instance.BackMusicVolume(1f);
         InitializeBodies();
-
         if (data.skins.Count > 0)
         {
             UpdateSkins();

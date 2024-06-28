@@ -32,16 +32,19 @@ public class SkinButtons : MonoBehaviour
     }
     private void BackToHomeSceneClick()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         data.skinIndex = data.chooseIndex;
         SceneManager.LoadScene("HomeScene");
     }
 
     private void NextBtn()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         SnakeSkinCtr.LoadNextSkin();
     }
     private void PrevBtn()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         SnakeSkinCtr.LoadPreviousSkin();
     }
 }

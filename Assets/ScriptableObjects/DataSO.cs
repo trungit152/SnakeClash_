@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -44,6 +45,8 @@ public class DataSO : ScriptableObject
         "Salvador", "Trinity", "Thomas", "Summer", "Faker", "Gumayusi", "Messi", "Ricon", "Richa", "Yasuo", "Zeros", "Trungdz",
         "Pepe"
     };
+    public List<float> SnakeUIPosX = new List<float>();
+    public List<float> SnakeUIRotateZ = new List<float>();
 
 }
 [System.Serializable]

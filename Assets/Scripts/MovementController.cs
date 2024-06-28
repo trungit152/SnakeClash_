@@ -63,6 +63,19 @@ public class MovementController : MonoBehaviour
     {
         
     }
+    public void EatAnimation()
+    {
+        StartCoroutine(LoopWithDelay(bodyParts.Count));
+    }
+    IEnumerator LoopWithDelay(int a)
+    {
+        for (int i = 0; i < a; i++)
+        {
+            if (i < bodyParts.Count) bodyParts[i].transform.localScale *= 1.2f;
+            yield return new WaitForSeconds(0.05f);
+            if (i < bodyParts.Count) bodyParts[i].transform.localScale /= 1.2f;
+        }
+    }
     private void FixedUpdate()
     {
         Move();
@@ -98,7 +111,7 @@ public class MovementController : MonoBehaviour
     private void MoveBody()
     {
         positionHistory.Insert(0, firstBody.transform.position);
-        if (positionHistory.Count > Mathf.Min(HeadController.level+50, 600))
+        if (positionHistory.Count > Mathf.Min(HeadController.level+50, 800))
         {
             positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
         }

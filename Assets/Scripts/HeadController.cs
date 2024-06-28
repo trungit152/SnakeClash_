@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Utilities.Common;
+using UnityEditor;
 
 public class HeadController : MonoBehaviour
 {
@@ -35,6 +37,13 @@ public class HeadController : MonoBehaviour
     [SerializeField] private CapsuleCollider hitBoxCol;
     [SerializeField] private GameObject top4Frame;
     [SerializeField] private GameObject miniMapGFX;
+    [SerializeField] private GameObject magnetPos;
+    //public ParticlePool healPool;
+    public CustomPool<ParticleSystem> healPool;
+    public ParticleSystem healParticle;
+
+    public CustomPool<ParticleSystem> magnetPool;
+    public ParticleSystem magnetParticle;
 
     public static bool test = false;
 
@@ -121,6 +130,9 @@ public class HeadController : MonoBehaviour
     }
     private void Start()
     {
+        healPool = new CustomPool<ParticleSystem>(healParticle, 3, transform, false);
+        magnetPool = new CustomPool<ParticleSystem>(magnetParticle, 3, magnetPos.transform, false);
+
         inGameRankingPanel.SetActive(false);
         level = data.startLevel;
         for (int i = 0; i < startBody.transform.childCount; i++)
@@ -177,6 +189,7 @@ public class HeadController : MonoBehaviour
     {
         if (MovementController.bodyParts.Count < 100)
         {
+            MovementController.EatAnimation();
             GameObject body = Instantiate(bodyPrefabs);
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[data.skinIndex].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (MovementController.bodyParts.Count() != 0)
@@ -201,6 +214,8 @@ public class HeadController : MonoBehaviour
             body.transform.SetParent(fullBody.transform);
             gapf += 0.03f;
             MovementController.gap = (int)gapf;
+
+            healPool.Spawn(transform.position, true);
         }
         if (MovementController.movementSpeed < 16f)
         {
@@ -221,50 +236,6 @@ public class HeadController : MonoBehaviour
             GrowSnake();
             SizeGrow();
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //if (other.CompareTag("Food"))
-        //{
-        //    Debug.Log("An");
-        //    Debug.Log(gameObject.name);
-        //    LevelUp();
-        //    RankingController.EnemyCheat(level);
-        //}
-        //if (other.CompareTag("Body"))
-        //{
-        //    EnemyBodyController bodyCtr = other.GetComponent<EnemyBodyController>();
-        //    if (level >= bodyCtr.GetLevel())
-        //    {
-        //        bodyCtr.Bit();
-        //    }
-        //    else
-        //    {
-        //        MovementController.Stun();
-        //    }
-        //}
-        //if (other.CompareTag("SpeedUp"))
-        //{
-        //    SpeedUp();
-        //}
-        //if (other.CompareTag("Magnite"))
-        //{
-        //    Magnite();
-        //}
-        //if (other.gameObject.CompareTag("Wall"))
-        //{
-        //    Debug.Log("va cham voi wall");
-        //    MovementController.instance.Collide();
-        //}
-        //if (other.gameObject.CompareTag("Head"))
-        //{
-        //    EnemyCollide enemyHead = other.gameObject.GetComponent<EnemyCollide>();
-        //    if (level >= enemyHead.level)
-        //    {
-        //        enemyHead.Die();
-        //    }
-        //}
     }
     public void SpeedUp()
     {
@@ -297,12 +268,12 @@ public class HeadController : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         MovementController.CameraUp(-7f);
-        Debug.Log("da tru");
     }
     public void Magnite()
     {
         if (!isMagnite)
         {
+            magnetPool.Spawn(magnetPos.transform.position, true);
             isMagnite = true;
             hitBoxCol.radius *= 4;
             StartCoroutine(Wait5s());

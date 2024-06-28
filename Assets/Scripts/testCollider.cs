@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities.Common;
 using static Cinemachine.DocumentationSortingAttribute;
 
 public class testCollider : MonoBehaviour
 {
+    public static testCollider instance;
+
     private HeadController headController;
     private HeadController HeadController
     {
@@ -55,9 +58,17 @@ public class testCollider : MonoBehaviour
             rankingController = value;
         }
     }
+
+    public CustomPool<ParticleSystem> disappearFoodPool;
+    public ParticleSystem disapearFoodParticle;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
-
+        disappearFoodPool = new CustomPool<ParticleSystem>(disapearFoodParticle, 3, null, false);
     }
 
     // Update is called once per frame
@@ -69,6 +80,8 @@ public class testCollider : MonoBehaviour
     {
         if (other.CompareTag("Food"))
         {
+            SoundController.instance.PlaySFX(SoundController.instance.eatSFX);
+            disappearFoodPool.Spawn(other.transform.position, true);
             HeadController.LevelUp();
             RankingController.EnemyCheat(HeadController.level);
         }

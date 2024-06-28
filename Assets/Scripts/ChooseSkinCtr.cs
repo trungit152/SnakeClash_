@@ -20,6 +20,7 @@ public class ChooseSkinCtr : MonoBehaviour
     {
         if (!data.skins[data.skinIndex].isBought)
         {
+            SoundController.instance.PlaySFX(SoundController.instance.coinSFX);
             data.coin -= data.skins[data.skinIndex].cost;
             coinText.text = data.coin.ToString();
             data.skins[data.skinIndex].isBought = true;

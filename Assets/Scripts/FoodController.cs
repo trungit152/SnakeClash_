@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using ParadoxNotion.Design;
+using Utilities.Common;
 public class FoodController : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer foodSprite;
@@ -9,6 +10,7 @@ public class FoodController : MonoBehaviour
     public float speed = 80f;
     private bool isBit;
     private Vector3 target;
+
     private void Awake()
     {
         instance = this;
@@ -40,7 +42,7 @@ public class FoodController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerHead"))
-        {
+        {       
             SpawnFood.instance.foods.Remove(gameObject);
             isBit = false;
             gameObject.SetActive(false);    

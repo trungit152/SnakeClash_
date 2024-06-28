@@ -158,6 +158,7 @@ public class ButtonController : MonoBehaviour
     
     public void GoToPlayClick()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         SceneManager.LoadScene("InGameScene");
     }
     public void PlayClick()
@@ -170,6 +171,7 @@ public class ButtonController : MonoBehaviour
     }
     public void PlayAgainClick()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         
     }
@@ -209,12 +211,15 @@ public class ButtonController : MonoBehaviour
     }
     public void HomeButtonClick()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.clickSFX);
         SceneManager.LoadScene("HomeScene");
     }
     public void IncreseRadius()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.magniteSFX);
         if (data.coin >= 1000 && magniteCd == 0)
         {
+            SoundController.instance.PlaySFX(SoundController.instance.coinSFX);
             magniteCd = 5f;
             HeadController.Magnite();
             data.coin -= 1000;
@@ -225,8 +230,10 @@ public class ButtonController : MonoBehaviour
    
     public void Grow()
     {
-        if(data.coin >= 1000 && growCd == 0)
+        SoundController.instance.PlaySFX(SoundController.instance.levelUpSFX);
+        if (data.coin >= 1000 && growCd == 0)
         {
+            SoundController.instance.PlaySFX(SoundController.instance.coinSFX);
             growCd = 0.5f;
             for (int i = 0; i < 7; i++)
             {
@@ -239,8 +246,10 @@ public class ButtonController : MonoBehaviour
 
     public void ZoomOutBtn()
     {
+        SoundController.instance.PlaySFX(SoundController.instance.zoomSFX);
         if (data.coin >= 1000 && zoomOutCd == 0)
         {
+            SoundController.instance.PlaySFX(SoundController.instance.coinSFX);
             zoomOutCd = 6f;
             HeadController.ZoomOut();
             data.coin -= 1000;

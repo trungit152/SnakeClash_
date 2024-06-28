@@ -184,9 +184,8 @@ public class EnemyCollide : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        //Debug.Log(fps);
         if (CheckViewPos(gameObject.transform.position) || CheckViewPos(bodyParts[bodyParts.Count - 1].transform.position) 
-            || CheckViewPos(bodyParts[bodyParts.Count/2].transform.position) || gameObject.transform.parent == RankingController.enemiesRank[0])
+            || CheckViewPos(bodyParts[bodyParts.Count/2].transform.position) || gameObject == RankingController.enemiesRank[0].transform.GetChild(0).gameObject)
         {
             ChasePlayer(HeadController.transform.position);
             RunAwayPlayer(HeadController.transform.position);
@@ -264,7 +263,6 @@ public class EnemyCollide : MonoBehaviour
             {
                 canChase = false;
             }
-            Debug.Log(gameObject + " dang duoi theo trong " + chaseTime +" giay nua");
             MoveBodyUseJob();
             res = HeadController.gameObject.transform.position - gameObject.transform.position;
             targetAngle = Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg;
@@ -287,7 +285,6 @@ public class EnemyCollide : MonoBehaviour
             {
                 canRunAway = false;
             }
-            Debug.Log(gameObject + " dang chay trong " + chaseTime + " giay nua");
             MoveBodyUseJob();
             res = -HeadController.gameObject.transform.position + gameObject.transform.position;
             targetAngle = Mathf.Atan2(res.x, res.z) * Mathf.Rad2Deg;
@@ -343,6 +340,7 @@ public class EnemyCollide : MonoBehaviour
         //Gioi han so body
         if (bodyParts.Count < 60 && fps >= 35f)
         {
+            EatAnimation();
             GameObject body = Instantiate(bodyPrefabs);
             body.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = data.skins[randSkin].dataSprite[IndexCounter(skinPath_, skinCounter++)];
             if (bodyParts.Count() > 1)
@@ -364,6 +362,19 @@ public class EnemyCollide : MonoBehaviour
             {
                 IncreseSpeed();
             }
+        }
+    }
+    public void EatAnimation()
+    {
+        StartCoroutine(LoopWithDelay(bodyParts.Count));
+    }
+    IEnumerator LoopWithDelay(int a)
+    {
+        for (int i = 0; i < a; i++)
+        {
+            if (i < bodyParts.Count) bodyParts[i].transform.localScale *= 1.2f;
+            yield return new WaitForSeconds(0.05f);
+            if (i < bodyParts.Count) bodyParts[i].transform.localScale /= 1.2f;
         }
     }
     private void GrowSnakeUsePool()
@@ -745,7 +756,7 @@ public class EnemyCollide : MonoBehaviour
     {
         positionHistory.Insert(0, transform.position);
         rotationHistory.Insert(0, transform.rotation);
-        if (positionHistory.Count > bodyParts.Count * 6 + 20)
+        if (positionHistory.Count > Mathf.Min(level+100, 800))
         {
             positionHistory.Remove(positionHistory[positionHistory.Count - 1]);
             rotationHistory.Remove(rotationHistory[rotationHistory.Count - 1]);
