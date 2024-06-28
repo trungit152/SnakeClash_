@@ -32,7 +32,7 @@ public class EnemyCollide : MonoBehaviour
     private List<Quaternion> rotationHistory;
     private float speedUpAdd = 7f;
     private float itemTime = 3f;
-
+    private float eating = 0f;
     private float deltaTime = 0.0f;
     private float fps;
     /*******************/
@@ -174,6 +174,14 @@ public class EnemyCollide : MonoBehaviour
     }
     private void Update()
     {
+        if(eating > 0)
+        {
+            eating -= Time.deltaTime;
+        }
+        else
+        {
+            eating = 0;
+        }
         UpdateIsColide();
         FPSCount();
     }
@@ -366,7 +374,12 @@ public class EnemyCollide : MonoBehaviour
     }
     public void EatAnimation()
     {
-        StartCoroutine(LoopWithDelay(bodyParts.Count));
+
+        if (eating == 0)
+        {
+            StartCoroutine(LoopWithDelay(bodyParts.Count));
+            eating = 0.5f;
+        }
     }
     IEnumerator LoopWithDelay(int a)
     {
@@ -762,10 +775,10 @@ public class EnemyCollide : MonoBehaviour
             rotationHistory.Remove(rotationHistory[rotationHistory.Count - 1]);
         }
 
-        positionHistoryNative = new NativeArray<float3>(600, Allocator.TempJob);
-        rotationHistoryNative = new NativeArray<Quaternion>(600, Allocator.TempJob);
-        bodyPartsNative = new NativeArray<float3>(100, Allocator.TempJob);
-        bodyRotationNative = new NativeArray<Quaternion>(100, Allocator.TempJob);
+        positionHistoryNative = new NativeArray<float3>(1000, Allocator.TempJob);
+        rotationHistoryNative = new NativeArray<Quaternion>(1000, Allocator.TempJob);
+        bodyPartsNative = new NativeArray<float3>(200, Allocator.TempJob);
+        bodyRotationNative = new NativeArray<Quaternion>(200, Allocator.TempJob);
         for (int i = 0; i < positionHistory.Count; i++)
         {
             positionHistoryNative[i] = positionHistory[i];

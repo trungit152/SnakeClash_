@@ -31,10 +31,16 @@ public class FoodController : MonoBehaviour
         {
             Vector3 direction = target - transform.position;
             float distance = direction.magnitude;
-            if (distance > 0.01f)
+            if (distance > 0.05f)
             {
                 Vector3 moveDirection = direction.normalized * speed * Time.deltaTime;
                 transform.Translate(moveDirection, Space.World);
+            }
+            else
+            {
+                SpawnFood.instance.foods.Remove(gameObject);
+                isBit = false;
+                gameObject.SetActive(false);
             }
         }
 

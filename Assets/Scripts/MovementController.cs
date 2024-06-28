@@ -14,7 +14,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] Camera mainCamera;
     private float camSize;
     private Vector3 offset;
-
+    private float eating = 0f;
     private float canMove = 0;
     private float targetAngle;
     private List<Vector3> positionHistory;
@@ -61,11 +61,22 @@ public class MovementController : MonoBehaviour
     }
     private void Update()
     {
-        
+        if (eating > 0)
+        {
+            eating -= Time.deltaTime;
+        }
+        else
+        {
+            eating = 0;
+        }
     }
     public void EatAnimation()
     {
-        StartCoroutine(LoopWithDelay(bodyParts.Count));
+        if(eating == 0)
+        {
+            StartCoroutine(LoopWithDelay(bodyParts.Count));
+            eating = 0.5f;
+        }
     }
     IEnumerator LoopWithDelay(int a)
     {
